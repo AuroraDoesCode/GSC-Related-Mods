@@ -10,7 +10,7 @@ createText(font, fontScale, align, relative, x, y, sort, alpha, text, color, mov
     textElem = (isDefined(isLevel) ? hud::createServerFontString(font, fontScale) : self hud::createFontString(font, fontScale));
     textElem SetText(text);
     textElem.archived = (self.menuSetting["MenuStealth"] ? false : true);
-    textElem scripts\cp\utility::setpoint(align, relative, x, y);
+    textElem hud::setpoint(align, relative, x, y);
     textElem.hideWhenInMenu = (self.menuSetting["MenuStealth"] ? true : false);
     textElem.sort           = sort;
     textElem.alpha          = alpha;
