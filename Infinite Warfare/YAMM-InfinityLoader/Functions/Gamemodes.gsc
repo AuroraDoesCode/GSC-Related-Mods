@@ -2,7 +2,7 @@
 *    Infinity Loader :: The Best GSC IDE!
 *
 *    Project : YAMM-InfinityLoader
-*    Author : 
+*    Author : TheUnknownCod3r
 *    Game : Call of Duty: Infinite Warfare
 *    Description : Gamemodes for YAMM
 *    Date : 21/09/2025 19:50:23

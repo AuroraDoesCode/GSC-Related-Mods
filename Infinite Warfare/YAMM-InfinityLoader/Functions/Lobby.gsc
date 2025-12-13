@@ -2,7 +2,7 @@
 *    Infinity Loader :: The Best GSC IDE!
 *
 *    Project : YAMM-InfinityLoader
-*    Author : 
+*    Author : TheUnknownCod3r
 *    Game : Call of Duty: Infinite Warfare
 *    Description : Lobby Mods for YAMM
 *    Date : 21/09/2025 19:47:18
@@ -54,12 +54,12 @@ TurnOnPower()
     }
     if(isdefined(level.fast_travel_spots))//activate fast travel spots :)
     {
-        foreach(var_05 in level.fast_travel_spots)
+        foreach(portal in level.fast_travel_spots)
         {
-            var_05.activated = 1;
-            var_05.var_13068 = 1;
-            if(isDefined(var_05.var_C626)) {
-                var_05.var_C626 = 0;
+            portal.activated = 1;//isPortalActive
+            portal.var_13068 = 1;//used portal to PAP
+            if(isDefined(portal.var_C626)) {
+                portal.var_C626 = 0;
             }
             if(level.script == "cp_zmb")
             { 
@@ -144,7 +144,7 @@ MaxRound()
         level notify("wave_complete");
         self iPrintLnAlt("Round Changing to: 2147483647 in TWO SECONDS!");
         wait 2;
-        level.wave_num = 2147483646;
+        level.wave_num = 2147483647;
         thread killAllZombies();
     }
 }

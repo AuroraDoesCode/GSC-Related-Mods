@@ -1,8 +1,8 @@
 /*
 *    Infinity Loader :: The Best GSC IDE!
 *
-*    Project : test3
-*    Author : 
+*    Project : YetAnotherModMenu
+*    Author : TheUnknownCod3r
 *    Game : Call of Duty: Infinite Warfare
 *    Description : Starts Zombies code execution!
 *    Date : 13/11/2024 01:35:11
@@ -153,8 +153,7 @@ InitializeMenu()
     if(level.script == "cp_zmb"){ level.jailPos = (3356.53,-996.361, -195.873); level.freePos = (640.463,919.658,0.126336); level.EESong = "mus_pa_mw2_80s_cover";} else if(level.script == "cp_rave") { level.EESong = "mus_pa_rave_hidden_track"; } else if(level.script == "cp_disco") { level.EESong = "mus_pa_disco_hidden_track"; }
 }
 
-welcomeMessage(message, message2)//this needs coords fix, createText hates it.
-{
+welcomeMessage(message, message2) {
     if (isDefined(self.welcomeMessage))
         while (1) {
             wait .05;
@@ -164,8 +163,8 @@ welcomeMessage(message, message2)//this needs coords fix, createText hates it.
     self.welcomeMessage = true;
 
     hud = [];
-    hud[0] = self createTextWelcome("objective", 1.35, "CENTER", "CENTER", -500, 120 + 60, 10, 1, message);
-    hud[1] = self createTextWelcome("objective", 1.35, "CENTER", "CENTER", 500, 140 + 60, 10, 1, message2);
+    hud[0] = self createText("small", 1.35, "CENTER", "CENTER", -500, -140 + 60, 10, 1, message);
+    hud[1] = self createText("small", 1.35, "CENTER", "CENTER", 500, -120 + 60, 10, 1, message2);
 
     hud[0] thread hudMoveX(-25, .35);
     hud[1] thread hudMoveX(25, .35);
@@ -178,109 +177,13 @@ welcomeMessage(message, message2)//this needs coords fix, createText hates it.
     hud[0] thread hudMoveX(500, .35);
     hud[1] thread hudMoveX(-500, .35);
     wait .35;
+
     self destroyAll(hud);
     self.welcomeMessage = undefined;
 }
 
 
-iPrintLnAlt(String)
-{
-    if (!isDefined(self.printMsgs))
-        self.printMsgs = [];
 
-    // If already 5 messages, remove the oldest
-    if (self.printMsgs.size >= 5)
-    {
-    oldest = self.printMsgs[self.printMsgs.size - 1];
-    if (isDefined(oldest))
-        oldest destroy();
-
-        // Rebuild without the oldest message
-    newArr = [];
-    for (i = 0; i < self.printMsgs.size - 1; i++)
-        newArr[i] = self.printMsgs[i];
-
-    self.printMsgs = newArr;
-    }
-
-    // Create iPrintLnAlt text
-    newMsg       = self createText("objective", 1, "LEFT", "BOTTOM", -420, -185, 3, 0, String, (1, 1, 1));
-    newMsg.alpha = 1;
-    newArr       = [];
-    newArr[0] = newMsg;
-    for (i = 0; i < self.printMsgs.size; i++)
-        newArr[i + 1] = self.printMsgs[i];
-
-    self.printMsgs = newArr;
-
-    // Push each message up when new ones come in
-    for (i = 0; i < self.printMsgs.size; i++)
-    {
-        self.printMsgs[i].y = -125 - (i * 20);
-    }
-
-    // fade in 4s
-    newMsg thread hudfade(0, 4);
-
-    // Fade and remove
-    newMsg thread removeAfterFade(self);
-}
-
-removeAfterFade(player)
-{
-    wait 4;
-    if (isDefined(self))
-    {
-        self destroy();
-        player.printMsgs = txtarray_remove(player.printMsgs, self);
-    }
-}
-
-txtarray_remove(arr, elem)
-{
-    newArr = [];
-    for (i = 0; i < arr.size; i++)
-        if (arr[i] != elem)
-            newArr[newArr.size] = arr[i];
-    return newArr;
-}
-
-GetTehMap()
-{
-    if(level.script == "cp_zmb") {return "Zombies in Spaceland";}
-    if(level.script == "cp_rave") {return "Rave in the Redwoods";}
-    if(level.script == "cp_disco") {return "Shaolin Shuffle";}
-    if(level.script == "cp_town") {return "Radioactive Thing";}
-    if(level.script == "cp_final") {return "Beast from Beyond";}
-}
-
-test()
-{
-    
-    self iPrintLnAlt("Testing");
-}
-
-
-PrintMenuControls()
-{
-    self endon("disconnect");
-    self endon("game_ended");
-    info = [];
-    info[0]="YetAnotherModMenu IW Edition";
-    info[1] = "Press [{+speed_throw}] & [{+melee}] To Open";
-    info[2] = "Press [{+speed_throw}] & [{+attack}] to Scroll";
-    info[3] = "Press [{+activate}] to Select, [{+melee}] to Go Back";
-    info[4] = "For Rank Sliders, Use [{+smoke}] and [{+frag}] To Scroll";
-    for(;;)
-    {
-        for(i=0;i<5;i++)
-        {
-            self iPrintLnAlt(info[i]);
-            wait 5;
-        }
-        wait .2;
-    }
-}
 modelSpawner(origin, model, angles, time)
 {
     if(isDefined(time))

@@ -2,14 +2,12 @@
 *    Infinity Loader :: The Best GSC IDE!
 *
 *    Project : YAMM-InfinityLoader
-*    Author : 
+*    Author : TheUnknownCod3r
 *    Game : Call of Duty: Infinite Warfare
-*    Description : An empty canvas for anything you want!
+*    Description : MenuUtils.gsc for YetAnotherModMenu
 *    Date : 13/09/2025 01:11:15
 *
 */
-
-
 
 menuMonitor()
 {
@@ -38,7 +36,7 @@ menuMonitor()
                     self.menu[CurrentCurs]-= self adsButtonPressed();
                 
                     self scrollingSystem();
-                    self PlayLocalSound("mouse_over");
+                    self PlayLocalSound("sentry_gun_beep");
                     wait .2;
                 }
             
@@ -57,6 +55,7 @@ menuMonitor()
                             self updateSlider("L2");
                             Func = self.sliders;
                         }
+                        self PlayLocalSound("mouse_click");
                     }
                     if(self FragButtonPressed())
                     {
@@ -70,6 +69,7 @@ menuMonitor()
                             self updateSlider("R2");
                             Func = self.sliders;
                         }
+                        self PlayLocalSound("mouse_click");
                     }
                     if(IsDefined(Menu.autofunc))
                         self thread doOption(Menu.func, Func[self getCurrentMenu() + "_" + self getCursor()], Menu.p1, Menu.p2, Menu.p3);

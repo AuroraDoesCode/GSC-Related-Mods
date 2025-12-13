@@ -120,7 +120,10 @@ MaxScore( player )
     player setplayerdata("cp","alienSession", "currency", self.var_B48A );
     player iPrintLnAlt("Score Set To: "+player getplayerdata("cp","alienSession","currency"));
 }
-
+MaxGameStats(player)
+{
+    Stats = ["kills","time_played","headshots","shots"];
+}
 ActivateFAF(card, player)
 {
     switch(card)

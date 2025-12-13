@@ -2,9 +2,9 @@
 *    Infinity Loader :: The Best GSC IDE!
 *
 *    Project : YAMM-InfinityLoader
-*    Author : 
+*    Author : TheUnknownCod3r
 *    Game : Call of Duty: Infinite Warfare
-*    Description : An empty canvas for anything you want!
+*    Description : Client Functions for YetAnotherModMenu
 *    Date : 13/09/2025 01:24:05
 *
 */

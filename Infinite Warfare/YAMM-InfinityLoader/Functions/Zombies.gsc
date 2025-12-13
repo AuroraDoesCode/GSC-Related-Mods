@@ -2,7 +2,7 @@
 *    Infinity Loader :: The Best GSC IDE!
 *
 *    Project : YAMM-InfinityLoader
-*    Author : 
+*    Author : TheUnknownCod3r
 *    Game : Call of Duty: Infinite Warfare
 *    Description : Zombies related functions
 *    Date : 21/09/2025 19:42:15

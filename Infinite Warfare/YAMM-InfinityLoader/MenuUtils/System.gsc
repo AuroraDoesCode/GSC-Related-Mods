@@ -2,9 +2,9 @@
 *    Infinity Loader :: The Best GSC IDE!
 *
 *    Project : YAMM-InfinityLoader
-*    Author : 
+*    Author : TheUnknownCod3r
 *    Game : Call of Duty: Infinite Warfare
-*    Description : An empty canvas for anything you want!
+*    Description : Access Scripts for YetAnotherModMenu
 *    Date : 13/09/2025 01:16:21
 *
 */
@@ -40,7 +40,7 @@ initializeSetup(access, player, allaccess)
         player menuOptions();
         player.menuSetting["HUDEdit"] = true;
         player thread MenuLoad();
-        player iPrintLn("You have Been Given "+GetAccessName(access));
+        player iPrintLnAlt("You have Been Given "+GetAccessName(access));
         player thread PrintMenuControls();
     }
 }

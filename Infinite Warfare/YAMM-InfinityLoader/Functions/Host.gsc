@@ -2,7 +2,7 @@
 *    Infinity Loader :: The Best GSC IDE!
 *
 *    Project : YAMM-InfinityLoader
-*    Author : 
+*    Author : TheUnknownCod3r
 *    Game : Call of Duty: Infinite Warfare
 *    Description : Host only stuff for YAMM
 *    Date : 21/09/2025 19:51:10
@@ -31,8 +31,8 @@ StartLobbyTimer()
     {
         level.lobbyTimerSet = true;
         level.TimerSet      = true;
-        timer               = self createTextWelcome("small",1.5,"left","bottom",0,0,1,1,"Lobby Ends In:",level.rainbowColour);
-        timer2              = self createTextWelcome("small",1.5,"left","bottom",105,0,1,1,undefined, level.rainbowColour);
+        timer               = self createText("small",1.5,"left","bottom",-320,-80,1,1,"Lobby Ends In:",level.rainbowColour);
+        timer2              = self createText("small",1.5,"left","bottom",-320,-60,1,1,undefined, level.rainbowColour);
         timer2 setTimer(level.TimerTime * 60);
         wait level.TimerTime * 60;
         timer destroy();
