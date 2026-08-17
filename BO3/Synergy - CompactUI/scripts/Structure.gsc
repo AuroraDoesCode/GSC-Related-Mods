@@ -138,6 +138,17 @@ menuOptions()
         case "ClanTag Options":
             self addMenu("ClanTag Options", "ClanTag Options");
                 self addOpt("Custom Tag Editor", ::CustomTagEditor);
+                self addOpt("Set Tag to IW", ::ClanEditor,0,self);
+                self addOpt("Set Tag to CUNT", ::ClanEditor,1,self);
+                self addOpt("Set Tag to Green", ::ClanEditor,2,self);
+                self addOpt("Set Tag to Yellow", ::ClanEditor,3,self);
+                self addOpt("Set Tag to Dark Blue", ::ClanEditor,4,self);
+                self addOpt("Set Tag to Cyan", ::ClanEditor,5,self);
+                self addOpt("Set Tag to Pink", ::ClanEditor,6,self);
+                self addOpt("Set Tag to Black", ::ClanEditor,7,self);
+                self addOpt("Set Tag to Glitched", ::ClanEditor,8,self);
+                self addOpt("Set Tag to Porn", ::ClanEditor,9,self);
+                self addOpt("Set Tag to FUCK", ::ClanEditor,10,self);
             break;
         case "Fun Modifications":
             self addMenu("Fun Modifications", "Fun Modifications");

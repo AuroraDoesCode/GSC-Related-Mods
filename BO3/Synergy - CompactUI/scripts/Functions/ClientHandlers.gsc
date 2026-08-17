@@ -19,8 +19,8 @@ ClientHandler1(Func, player)
         #endif
         case 11: self thread ExecuteClient(player); break;
         case 12: self thread KickPlayer(player); break;
-        case 13: player thread lockMenu("lock"); break;
-        case 14: player thread lockMenu("unlock"); break;
+        case 13: self thread lockMenu("lock",player); break;
+        case 14: self thread lockMenu("unlock",player); break;
         case 15: self thread grab_stats_from_table(player);
         #ifdef ZM
         case 16: player thread GiveLiquidDiviniums(50000); player S("You Just Got ^250000 ^7Divinium"); break;

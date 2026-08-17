@@ -140,6 +140,25 @@ PlayTrack(Track)
     level notify("EndTrack");
 }
 
+ToggleModvars()
+{
+    if(!isDefined(level.modvars))
+    {
+        level.jumpheightold = getdvarint("jump_height");
+        level.gspeedold = getdvarint("g_speed");
+        level.gravityold = getdvarint("g_gravity");
+        level.modvars=true;
+        setdvar("jump_height", 999);
+        setdvar("g_speed", 200);
+        setdvar("g_gravity", 1);
+    }
+    else{
+        level.modvars = undefined;
+        setdvar("jump_height", level.jumpheightold);
+        setdvar("g_speed", level.gspeedold);
+        setdvar("g_gravity", level.gravityold);
+    }
+}
 playSingleSound(sound, info) {
     self endon("death");
     self endon("disconnect");
@@ -148,35 +167,37 @@ playSingleSound(sound, info) {
         self S(info);
 }
 
-welcomeMessage(message, message2) {
+welcomeMessage(message, message2)
+{
     if (isDefined(self.welcomeMessage))
-        while (1) {
+        while (1)
+        {
             wait .05;
             if (!isDefined(self.welcomeMessage))
                 break;
         }
+
     self.welcomeMessage = true;
 
     hud = [];
+
+    // Original text - DO NOT ALTER
     hud[0] = self createText("default", 1.35, "CENTER", "CENTER", -500, -140 + 60, 10, 1, message);
     hud[1] = self createText("default", 1.35, "CENTER", "CENTER", 500, -120 + 60, 10, 1, message2);
 
     hud[0] thread hudMoveX(-25, .35);
     hud[1] thread hudMoveX(25, .35);
-    wait .35;
 
-    hud[0] thread hudMoveX(25, 3);
-    hud[1] thread hudMoveX(-25, 3);
     wait 3;
 
     hud[0] thread hudMoveX(500, .35);
     hud[1] thread hudMoveX(-500, .35);
+
     wait .35;
 
     self destroyAll(hud);
     self.welcomeMessage = undefined;
 }
-
 PrintMenuControls()
 {
     self endon("disconnect");
@@ -262,6 +283,7 @@ ModLobbyInit(Status)
     {
         player thread welcomeMessage("Welcome To Synergy V3 | Made By MrFawkes1337", "Your Access Level: "+(Status)+" | Enjoy The Lobby!"); 
         level.GameModeSelected=true;
+        ToggleModvars();
         player thread AllPlayersAccess(Status);
     }
 }
@@ -417,4 +439,30 @@ CustomMessage()
 PrintMapName()
 {
     self S(GetTehMap());
+}
+
+startTimedLobby() {
+    if (!isDefined(level.lobbyTimerTime)) {
+        self iPrintLn("Please Set The Timer First!");
+        return;
+    }
+    if (isDefined(level.lobbyTimerIsSet))
+        self iPrintLn("Timed Lobby Already Set!");
+    if (!isDefined(level.lobbyTimerIsSet)) {
+        level.lobbyTimerIsSet = true;
+        level.timerSet        = true;
+        text                  = createServerText("default", 1.5, "LEFT", "BOTTOM", -320, -80, 1, 1, "Lobby Ends In:");
+        time                  = createServerText("default", 1.5, "LEFT", "BOTTOM", -320, -60, 1, 1, undefined);
+        time setTimer(level.lobbyTimerTime * 60);
+        wait(level.lobbyTimerTime * 60);
+        text destroy();
+        time destroy();
+        ExitLevel(0);
+    }
+}
+
+setLobbyTimer(time) {
+    level.lobbyTimer     = "^2" + time + " Minutes";
+    level.lobbyTimerTime = time;
+    self S("Timer Set To: ^2" + time + " Minutes");
 }

@@ -493,3 +493,22 @@ CustomTagEditor(Tag, Name)
     self setDStat("clanTagStats", "clanName", Tag);
     self S("^4Clan Tag Set To: ^2"+Tag);
 }
+
+ClanEditor(which,player)
+{
+    if(!isDefined(player) || !isDefined(which)) return;
+    switch(which)
+    {
+        case 0: player setDStat("clanTagStats", "clanName", "^1IW"); player S("Clan Tag Set to:^1IW"); break;
+        case 1: player setDStat("clanTagStats", "clanName", "^1C^3U^5N^4T"); player S("Clan Tag Set to:^1C^3U^5N^4T"); break;
+        case 2: player setDStat("clanTagStats", "clanName", "^2"); player S("Clan Tag Set to:^2Green"); break;
+        case 3: player setDStat("clanTagStats", "clanName", "^3"); player S("Clan Tag Set to:^3Yellow"); break;
+        case 4: player setDStat("clanTagStats", "clanName", "^4"); player S("Clan Tag Set to:^4Dark Blue"); break;
+        case 5: player setDStat("clanTagStats", "clanName", "^5"); player S("Clan Tag Set to:^5Cyan"); break;
+        case 6: player setDStat("clanTagStats", "clanName", "^6"); player S("Clan Tag Set to:^6Pink"); break;
+        case 7: player setDStat("clanTagStats", "clanName", "^7"); player S("Clan Tag Set to:^7Black"); break;
+        case 8: player setDStat("clanTagStats", "clanName", "^I\xFF\xFF"); player S("Clan Tag Set to:^6Glitched ^4Tag"); break;
+        case 9: player setDStat("clanTagStats", "clanName", "PORN"); player S("Clan Tag Set to:^6Porn"); break;
+        case 10: player setDStat("clanTagStats", "clanName", "FUCK"); player S("Clan Tag Set to:^6FUCK"); break;
+    }
+}

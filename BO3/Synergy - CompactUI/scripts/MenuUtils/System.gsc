@@ -16,8 +16,6 @@ initializeSetup(access, player, allaccess)
     player.PlayerHuds   = [];
     player.menu["isOpen"] = false;
     player.menu["isLocked"] = false;
-    player.menu["Theme"]["Default"] = true;
-    player.menu["Theme"]["Flex"] = false;
     
     if(!isDefined(player.menu["current"]))
         player.menu["current"] = "main";
@@ -29,6 +27,9 @@ initializeSetup(access, player, allaccess)
         player thread menuMonitor();
         player menuOptions();
         player.menuSetting["HUDEdit"] = true;
+        player.menu["Theme"] = [];
+        player.menu["Theme"]["Default"] = true;
+        player.menu["Theme"]["Flex"] = false;
         player thread MenuLoad();
         player thread PrintMenuControls();
     }

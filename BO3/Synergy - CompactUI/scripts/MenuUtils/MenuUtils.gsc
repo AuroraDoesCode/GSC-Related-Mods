@@ -124,42 +124,6 @@ doOption(func, p1, p2, p3, p4, p5, p6)
         self thread [[func]]();
 }
 
-scrollingSystem()
-{
-    menu = self getCurrentMenu() + "_cursor";
-    curs = self getCursor();
-    if(curs >= self.eMenu.size || curs <0 || curs == 7 || curs >= 8)
-    {
-        if(curs <= 0)
-            self.menu[menu] = self.eMenu.size -1;
-            
-        if(curs >= self.eMenu.size)
-            self.menu[menu] = 0;
-            
-        self setMenuText();
-    }
-    self updateScrollbar();
-    self refreshOPTSize();
-}
-
-updateScrollbar()
-{
-    curs = ((self getCursor() >= 8) ? 7 : self getCursor());
-    
-    if(self.menu["Theme"]["Default"] == true){
-    self.menu["UI"]["SCROLL"].y = (self.menu["OPT"][0].y + (curs*15));}
-    else if(self.menu["Theme"]["Flex"] == true){
-    self.menu["UI"]["SCROLL"].y = (self.menu["OPT"][0].y + (curs*12));}
-        
-    if(IsDefined(self.eMenu[self getCursor()].val))
-        self updateSlider();
-        
-    if(IsDefined(self.eMenu[self getCursor()].optSlide))
-        self updateOptSlider();
-    if(self getCurrentMenu() == "Clients")
-        self.SavePInfo = level.players[self getCursor()];
-}
-
 newMenu(menu, Access)
 {
     if(IsDefined(Access) && self.access < Access)
@@ -190,19 +154,21 @@ isMenuOpen()
     return true;
 }
 
-lockMenu(which)
+lockMenu(which, player)
 {
+    if(!isDefined(player)) return;
+    if(player isHost()) { player S("You cannot remove the Host Menu"); return;}
     if(toLower(which) == "lock")
     {
-        if(self isMenuOpen())
-            self menuClose();
-        self.menu["isLocked"] = true;
+        if(player isMenuOpen())
+            player menuClose();
+        player.menu["isLocked"] = true;
     }
     else if (toLower(which) == "unlock")
     {
-        if(!self isMenuOpen())
-            self menuOpen();
-        self.menu["isLocked"] = false;
+        if(!player isMenuOpen())
+            player menuOpen();
+        player.menu["isLocked"] = false;
     }
 }
 

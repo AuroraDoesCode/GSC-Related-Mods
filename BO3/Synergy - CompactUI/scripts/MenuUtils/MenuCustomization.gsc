@@ -1,5 +1,7 @@
 MenuSave()
 {
+    ThemeValue = (self.menu["Theme"]["Flex"] == true ? 1 : 0);
+
     SaveDesgin = 
         SetMenuBool(self.menuSetting["MenuFreeze"]) +";"+
         SetMenuBool(self.menuSetting["MenuStealth"]) +";"+
@@ -22,8 +24,9 @@ MenuSave()
         self.menuSetting["MenuX"] +";"+
         self.menuSetting["MenuY"] +";"+
         SetMenuBool(self.menuSetting["MenuGodmode"]) +";"+
-        SetMenuBool(self.menuSetting["ShowClientINFO"]);
-    
+        SetMenuBool(self.menuSetting["ShowClientINFO"]) +";"+
+        ThemeValue;
+
     setDvar(self getName() + "MenuDesign", SaveDesgin);
 }
 
@@ -31,15 +34,14 @@ MenuLoad(Val)
 {  
     if(!isdefined(self.menuSetting))
         self.menuSetting = [];
-        
-    MenuDefaults = strTok("0;1;1;1;0;1;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;1",";");
+
+    MenuDefaults = strTok("0;1;1;1;0;1;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;1;0",";");
     
     if(!IsDefined(Val) || IsDefined(Val) && Val == 0)
     {
-        
         if(GetDvarString(self getName() + "MenuDesign").size > 0)
         {
-            dvar         = GetDvarString(self getName() + "MenuDesign"); 
+            dvar = GetDvarString(self getName() + "MenuDesign"); 
             MenuDefaults = strTok(dvar, ";");
         }
     }
@@ -65,13 +67,48 @@ MenuLoad(Val)
     self.menuSetting["BannerGradColor1"] = int(MenuDefaults[16]);
     self.menuSetting["BannerGradColor2"] = int(MenuDefaults[17]);
     
-    self.menuSetting["BannerGradRainbow"] = (MenuDefaults[2] == "1" ? "rainbow" : (GetFloatString(MenuDefaults[15]), GetFloatString(MenuDefaults[16]), GetFloatString(MenuDefaults[17])));
-    self.menuSetting["ScrollerGradRainbow"] = (MenuDefaults[3] == "1" ? "rainbow" : (GetFloatString(MenuDefaults[6]), GetFloatString(MenuDefaults[7]), GetFloatString(MenuDefaults[8])));
-    self.menuSetting["BackgroundGradRainbow"] = (MenuDefaults[4] == "1" ? "rainbow" : (GetFloatString(MenuDefaults[9]), GetFloatString(MenuDefaults[10]), GetFloatString(MenuDefaults[11])));
-    self.menuSetting["BannerNoneRainbow"] = (MenuDefaults[5] == "1" ? "rainbow" : (GetFloatString(MenuDefaults[12]), GetFloatString(MenuDefaults[13]), GetFloatString(MenuDefaults[14])));
+    self.menuSetting["BannerGradRainbow"] = (
+        MenuDefaults[2] == "1"
+        ? "rainbow"
+        : (GetFloatString(MenuDefaults[15]), GetFloatString(MenuDefaults[16]), GetFloatString(MenuDefaults[17]))
+    );
+
+    self.menuSetting["ScrollerGradRainbow"] = (
+        MenuDefaults[3] == "1"
+        ? "rainbow"
+        : (GetFloatString(MenuDefaults[6]), GetFloatString(MenuDefaults[7]), GetFloatString(MenuDefaults[8]))
+    );
+
+    self.menuSetting["BackgroundGradRainbow"] = (
+        MenuDefaults[4] == "1"
+        ? "rainbow"
+        : (GetFloatString(MenuDefaults[9]), GetFloatString(MenuDefaults[10]), GetFloatString(MenuDefaults[11]))
+    );
+
+    self.menuSetting["BannerNoneRainbow"] = (
+        MenuDefaults[5] == "1"
+        ? "rainbow"
+        : (GetFloatString(MenuDefaults[12]), GetFloatString(MenuDefaults[13]), GetFloatString(MenuDefaults[14]))
+    );
     
     self.menuSetting["MenuX"] = int(MenuDefaults[18]);
     self.menuSetting["MenuY"] = int(MenuDefaults[19]);
+
+    // Theme
+    self.menu["Theme"] = [];
+    self.menu["Theme"]["Default"] = true;
+    self.menu["Theme"]["Flex"] = false;
+
+    // Theme value was added after the original save format.
+    // Missing value = Default.
+    if(MenuDefaults.size > 22)
+    {
+        if(MenuDefaults[22] == "1")
+        {
+            self.menu["Theme"]["Default"] = false;
+            self.menu["Theme"]["Flex"] = true;
+        }
+    }
     
     if(IsDefined(Val) && Val == 1 || IsDefined(Val) && Val == 0)
     {
@@ -115,74 +152,110 @@ ShowClientINFO()
 MoveMenu()
 {
     self menuClose();
-    
+
     MenuVisTemp = [];
-    
-    MenuVisTemp["BG"] = self createRectangle("TOPLEFT", "TOP", -425, 90, 170, int(8*15) + 45, (0,0,0), "white", 0, .6, true);
-    MenuVisTemp["TITLE"] = self createText("default", 1.5, "CENTER", "TOP", -340, 105, 0, 1, "Menu Reposition", (1, 1, 1), true);
-    MenuVisTemp["INFO0"] = self createText("default", 1.2, "CENTER", "CENTER", -340, -75, 0, 1, "Movement Controls", (1, 1, 1), true);
-    MenuVisTemp["INFO1"] = self createText("default", 1, "CENTER", "CENTER", -340, -40, 0, 1, "UP - [{+attack}] DOWN - [{+speed_throw}]", (1, 1, 1), true);
-    MenuVisTemp["INFO2"] = self createText("default", 1, "CENTER", "CENTER", -340, -30, 0, 1, "LEFT - [{+actionslot 4}] RIGHT - [{+actionslot 3}]", (1, 1, 1), true);
-    MenuVisTemp["INFO3"] = self createText("default", 1, "CENTER", "CENTER", -340, 0, 0, 1, "CONFIRM PLACEMENT - [{+activate}]", (1, 1, 1), true);
-    MenuVisTemp["INFO4"] = self createText("default", 1, "CENTER", "CENTER", -340, 10, 0, 1, "DISCARD CHANGES - [{+melee}]", (1, 1, 1), true);
-    
+
+    if(self.menu["Theme"]["Default"] == true)
+    {
+        MenuVisTemp["BG"] = self createRectangle("TOPLEFT","TOP",-425,90,170,int(8 * 15) + 45,(0, 0, 0),"white",0,.6,true);
+
+        MenuVisTemp["TITLE"] = self createText("default",1.5,"CENTER","TOP",-340,105,0,1,"Menu Reposition",(1, 1, 1),true);
+
+        MenuVisTemp["INFO0"] = self createText("default",1.2,"CENTER","CENTER",-340,-75,0,1,"Movement Controls",(1, 1, 1),true);
+
+        MenuVisTemp["INFO1"] = self createText("default",1,"CENTER","CENTER",-340,-40,0,1,"UP - [{+attack}] DOWN - [{+speed_throw}]",(1, 1, 1),true);
+
+        MenuVisTemp["INFO2"] = self createText("default",1,"CENTER","CENTER",-340,-30,0,1,"LEFT - [{+actionslot 4}] RIGHT - [{+actionslot 3}]",(1, 1, 1),true);
+
+        MenuVisTemp["INFO3"] = self createText("default",1,"CENTER","CENTER",-340,0,0,1,"CONFIRM PLACEMENT - [{+activate}]",(1, 1, 1),true);
+
+        MenuVisTemp["INFO4"] = self createText("default",1,"CENTER","CENTER",-340,-10,0,1,"DISCARD CHANGES - [{+melee}]",(1, 1, 1),true);
+    }
+    else if(self.menu["Theme"]["Flex"] == true)
+    {
+        MenuVisTemp["BG"] = self createRectangle("CENTER","CENTER",0,-185,250,int(8 * 12) + 85,(0, 0, 0),"white",0,.6,true);
+
+        MenuVisTemp["TITLE"] = self createText("default",1.3,"CENTER","CENTER",0,-232,0,1,"Menu Reposition",(1, 1, 1),true);
+
+        MenuVisTemp["INFO0"] = self createText("default",1.2,"CENTER","CENTER",0,-75,0,1,"Movement Controls",(1, 1, 1),true);
+
+        MenuVisTemp["INFO1"] = self createText("default",1,"CENTER","CENTER",0,-40,0,1,"UP - [{+attack}] DOWN - [{+speed_throw}]",(1, 1, 1),true);
+
+        MenuVisTemp["INFO2"] = self createText("default",1,"CENTER","CENTER",0,-30,0,1,"LEFT - [{+actionslot 4}] RIGHT - [{+actionslot 3}]",(1, 1, 1),true);
+
+        MenuVisTemp["INFO3"] = self createText("default",1,"CENTER","CENTER",0,0,0,1,"CONFIRM PLACEMENT - [{+activate}]",(1, 1, 1),true);
+
+        MenuVisTemp["INFO4"] = self createText("default",1,"CENTER","CENTER",0,10,0,1,"DISCARD CHANGES - [{+melee}]",(1, 1, 1),true);
+    }
+
     X = self.menuSetting["MenuX"];
     Y = self.menuSetting["MenuY"];
-    
+
+    // Apply the saved offset to the preview.
+    foreach(HUD in MenuVisTemp)
+    {
+        HUD.x += X;
+        HUD.y += Y;
+    }
+
     while(self useButtonPressed())
         wait .05;
-    
+
     while(!self meleeButtonPressed())
     {
         if(self attackButtonPressed())
         {
             Y += 10;
+
             foreach(HUD in MenuVisTemp)
                 HUD.y += 10;
-                
+
             wait .15;
         }
-            
+
         if(self adsButtonPressed())
         {
             Y -= 10;
+
             foreach(HUD in MenuVisTemp)
                 HUD.y -= 10;
-                
+
             wait .15;
         }
-       
-        if(self ActionSlotThreeButtonPressed())
-        {
-            X += 10;
-            foreach(HUD in MenuVisTemp)
-                HUD.x += 10;
-                
-            wait .15;
-        }
-            
+
         if(self ActionSlotFourButtonPressed())
         {
-            X -= 10;
+            X += 10;
+
             foreach(HUD in MenuVisTemp)
-                HUD.x -= 10;
-                
+                HUD.x += 10;
+
             wait .15;
         }
-        
+
+        if(self ActionSlotThreeButtonPressed())
+        {
+            X -= 10;
+
+            foreach(HUD in MenuVisTemp)
+                HUD.x -= 10;
+
+            wait .15;
+        }
+
         if(self useButtonPressed())
         {
             self.menuSetting["MenuX"] = X;
             self.menuSetting["MenuY"] = Y;
             break;
         }
-        
+
         wait .05;
     }
-    
+
     while(self useButtonPressed() || self meleeButtonPressed())
         wait .05;
-    
+
     self destroyAll(MenuVisTemp);
     self menuOpen();
 }

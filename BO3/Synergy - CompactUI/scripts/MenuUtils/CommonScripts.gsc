@@ -46,6 +46,7 @@ createRectangle(align, relative, x, y, width, height, color, shader, sort, alpha
     return boxElem;
 }
 
+
 affectElement(type, time, value)
 {
     if(type == "x" || type == "y")
@@ -256,4 +257,15 @@ IsInArray(array, element)
 TypeWriter(message) {
     foreach(player in level.players)
     player hud_message::hintMessage(message);
+}
+
+createServerText(font, fontScale, align, relative, x, y, sort, alpha, text, color) {
+    textElem = hud::createServerFontString(font, fontScale);
+    textElem hud::setPoint(align, relative, x, y);
+    textElem.hideWhenInMenu = true;
+    textElem.sort = sort;
+    textElem.alpha = alpha;
+    textElem.color = color;
+    textElem setText(text);
+    return textElem;
 }
