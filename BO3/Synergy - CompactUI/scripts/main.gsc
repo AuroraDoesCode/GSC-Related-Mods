@@ -169,6 +169,9 @@ onPlayerSpawned()
         level.player_too_many_weapons_monitor = false;
     level flag::wait_till("initial_blackscreen_passed");
     #endif
+    #ifdef MP 
+    thread enableonlinematch();
+    #endif
     if(self IsHost()){
         self FreezeControls(false);
         self thread initializeSetup(5, self);

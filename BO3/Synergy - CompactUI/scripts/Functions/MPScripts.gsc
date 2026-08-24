@@ -369,6 +369,22 @@ MonitorForQS()
 ##          GAMEMODE CODE ENDED          ##
 ###########################################
 */
+enableonlinematch()
+{
+    level waittill("prematch_over");
+
+    while(level.inPrematchPeriod)
+    {
+        wait 1;
+    }
+
+    wait 2;
+    getplayers();
+
+    level._online = true;
+    compiler::enableonlinematch();//STRICTLY A FUNCTION IN T7 COMPILER
+    level.players[0] iPrintLnBold("^2You are now in an online match!");
+}
 
 toggleUAV()
 {
