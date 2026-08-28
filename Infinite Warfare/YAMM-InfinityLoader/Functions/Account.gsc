@@ -140,8 +140,8 @@ UnlockTalismans(player)
 
 GetKeyCount()
 {
-    keyCount = self GetPlayerData("common","sharedProgression","keys");
-if(!isDefined(keyCount)){ self iPrintLnAlt("Wrong Player Data"); return;}
+    keyCount = self GetPlayerData("common","sharedProgression", "currency");
+    if(!isDefined(keyCount)){ self iPrintLnAlt("Wrong Player Data"); return;}
     self iPrintLnAlt("You Currently Have: "+keyCount+" Keys");
 }
 SoulKeyUnlock(player)

@@ -35,9 +35,9 @@ GetNeilPart(partNum)
 {
     switch(partNum)
     {
-        case 0 : self playlocalsound("neil_part_pickup"); scripts\cp\_interaction::remove_from_current_interaction_list(level.var_BEC5);level.var_BEC5.var_BEC5 delete();level.var_BEC7 = 1;set_quest_icon(7); break;
-        case 1 : self playLocalSound("neil_part_pickup"); playfx(level._effect["souvenir_pickup"],level.var_BEAE.part.origin);scripts\cp\_interaction::remove_from_current_interaction_list(level.var_BEAE);level.var_BEAE.part delete();level.var_BEB0 = 1; set_quest_icon(8); break;
-        case 2 : self playlocalsound("neil_part_pickup");playfx(level._effect["souvenir_pickup"],level.var_BEC1.part.origin);scripts\cp\_interaction::remove_from_current_interaction_list(level.var_BEC1);level.var_BEC1.part delete();level.var_BEC3 = 1;set_quest_icon(9); break;
+        case 0 : self playlocalsound("neil_part_pickup"); scripts\cp\_interaction::remove_from_current_interaction_list(level.var_BEC5);level.var_BEC5.var_BEC5 delete();level.var_BEC7 = 1;level scripts\cp\_utility::set_quest_icon(7); break;
+        case 1 : self playLocalSound("neil_part_pickup"); playfx(level._effect["souvenir_pickup"],level.var_BEAE.part.origin);scripts\cp\_interaction::remove_from_current_interaction_list(level.var_BEAE);level.var_BEAE.part delete();level.var_BEB0 = 1; level scripts\cp\_utility::set_quest_icon(8); break;
+        case 2 : self playlocalsound("neil_part_pickup");playfx(level._effect["souvenir_pickup"],level.var_BEC1.part.origin);scripts\cp\_interaction::remove_from_current_interaction_list(level.var_BEC1);level.var_BEC1.part delete();level.var_BEC3 = 1;level scripts\cp\_utility::set_quest_icon(9); break;
     }
 }
 
@@ -70,7 +70,7 @@ beast_open_sesame()
     scripts\common\utility::flag_set("power_on");
     level notify("power_on");
     
-    set_quest_icon(6);
+    level scripts\cp\_utility::set_quest_icon(6);
     var_00 = scripts\common\utility::getstructarray("neil_head","script_noteworthy");
     foreach(var_02 in var_00) {
         if(isDefined(var_02.var_8C98)) {
@@ -120,17 +120,7 @@ CombineArrays(param_00,param_01,param_02,param_03)
     }
 }
 
-set_quest_icon(param_00)
-{
-    setomnvarbit("zombie_quest_piece",param_00,1);
-    setclientmatchdata("questPieces","quest_piece_" + param_00,1);
-    if(!isdefined(level.num_of_quest_pieces_completed))
-    {
-        level.num_of_quest_pieces_completed = 0;
-    }
 
-    level.num_of_quest_pieces_completed++;
-}
 
 GrabSetiComParts()
 {
@@ -141,7 +131,8 @@ GrabSetiComParts()
 
 GrabTheSeticom()
 {
-    scripts\common\utility::flag_set("dj_request_defense_done");
+    scripts\common\utility::flag_set("dj_request_defense_done");    
+    scripts\common\utility::flag_set("defend_sequence");
     foreach(player in level.players)
     {
         player setclientomnvar("zm_special_item",3);
@@ -150,20 +141,18 @@ GrabTheSeticom()
 
 pick_up_djquest_part(tagName,quest_part)
 {
-    if(level.var_5738 == true && level.var_5739 == true && level.var_573A == true)
-    {
-        scripts\common\utility::flag_set("dj_fetch_quest_completed");
-    }
-    var1 = 0;
-    if(tagName == "dj_quest_part_3") var1 = 24;
-    else if(tagName == "dj_quest_part_2") var1 = 23; 
-    else if(tagName == "dj_quest_part_1") var1 = 22; 
+
+    scripts\common\utility::flag_set("dj_fetch_quest_completed");
+    iconId = 0;
+    if(tagName == "dj_quest_part_3") iconId = 24;
+    else if(tagName == "dj_quest_part_2") iconId = 23; 
+    else if(tagName == "dj_quest_part_1") iconId = 22; 
 
     playfx(level._effect["souvenir_pickup"],tagName.part_model.origin);
     quest_part playlocalsound("part_pickup");
     thread scripts\cp\zombies\zombie_analytics::func_AF6F(level.wave_num,tagName.groupname,tagName.part_model.model);
     tagName.part_model delete();
-    level set_quest_icon(var1);
+    level scripts\cp\_utility::set_quest_icon(iconId);
 }
 
 GiveTickets(Amount)
@@ -205,7 +194,7 @@ ShaolinEESteps(step)
 		case 1: 
             token = getent("peepshow_token","targetname");
             level.peepshow_token_found = 1;
-            enterStall = scripts\engine\utility::getstruct("enter_stall","script_noteworthy");
+            enterStall = scripts\common\utility::getstruct("enter_stall","script_noteworthy");
             enterStall.script_noteworthy = "enter_stall_allowed";
             self thread scripts\cp\_vo::try_to_play_vo("pap_quest_collect_coin","disco_comment_vo","low",10,0,2,0,40);
             token delete();
@@ -235,11 +224,11 @@ ShaolinEESteps(step)
           level notify("cage_win");
         break;
 		case 5: 
-        var_05 = scripts\engine\utility::getstruct("locker_rortator_mpq","targetname");
+        var_05 = scripts\common\utility::getstruct("locker_rortator_mpq","targetname");
          var_01 = getent("subway_locker_door","targetname");
           if(isdefined(var_05))
           {
-            var_06 = scripts\engine\utility::spawn_tag_origin(var_05.origin,var_05.angles);
+            var_06 = scripts\common\utility::spawn_tag_origin(var_05.origin,var_05.angles);
             var_01 linkto(var_06);
             playsoundatpos(var_06.origin,"disco_locker_open");
             var_06 rotateyaw(120,2,1,0.5);
@@ -261,12 +250,12 @@ ShaolinEESteps(step)
             scripts\cp\_utility::deactivatebrushmodel(var_03,1);
         break;
 		case 6:
-            var_02 = scripts\engine\utility::getstructarray("phonebooth","script_noteworthy");
+            var_02 = scripts\common\utility::getstructarray("phonebooth","script_noteworthy");
             level.phone_puzzle_phone = var_02[var_02.size - 1];
             thread payphone_ringing(level.phone_puzzle_phone);
-            scripts\engine\utility::flag_set("skq_p2t2_1");
-            scripts\engine\utility::flag_set("skq_p2t2_2");
-            scripts\engine\utility::flag_set("skq_p2t2_3");
+            scripts\common\utility::flag_set("skq_p2t2_1");
+            scripts\common\utility::flag_set("skq_p2t2_2");
+            scripts\common\utility::flag_set("skq_p2t2_3");
         break;
 		case 7:
             var_02 = getentarray("mpq_poster_model","targetname");
@@ -274,13 +263,13 @@ ShaolinEESteps(step)
             {
                 var_04 notify("correct_poster_got");
             }
-            self.number delete();
+            self.var_C211 delete();
             self delete();
-            level scripts\cp\utility::set_quest_icon(16);
-            scripts\engine\utility::flag_set("correct_poster_got");
+            level scripts\cp\_utility::set_quest_icon(16);
+            scripts\common\utility::flag_set("correct_poster_got");
             level.phone_puzzle_phone = undefined;
-            scripts\engine\utility::flag_set("skq_p2t2_4");
-            scripts\engine\utility::flag_set("skq_p2t2_5");
+            scripts\common\utility::flag_set("skq_p2t2_4");
+            scripts\common\utility::flag_set("skq_p2t2_5");
             foreach(var_11 in level.rooftopcypherglyphs)
             {
                 if(isdefined(var_11))
@@ -303,7 +292,7 @@ rk_symbol_handler(param_00,param_01)
 	var_03 makeusable();
 	var_03 setusefov(45);
 	var_03 setuserange(96);
-	var_04 = scripts\common\utility::drop_to_ground(var_02.origin,30,-100);
+	var_04 = scripts\common\utility::func_5D14(var_02.origin,30,-100);
 	var_04 = var_04 + (0,0,1);
 	var_05 = spawnfx(level._effect["test_glyph_mpq"],var_04,anglestoforward(var_02.angles),anglestoup(var_02.angles));
 	triggerfx(var_05);

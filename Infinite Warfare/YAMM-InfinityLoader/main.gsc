@@ -2,9 +2,9 @@
 *    Infinity Loader :: The Best GSC IDE!
 *
 *    Project : YetAnotherModMenu
-*    Author : TheUnknownCod3r
+*    Author : AuroraDoesCode
 *    Game : Call of Duty: Infinite Warfare
-*    Description : Starts Zombies code execution!
+*    Description : IW Zombies All Client Mod Menu by AuroraDoesCode / CF4_99 (Menu base Creator) //im just lazy, I cba to make my own XD.
 *    Date : 13/11/2024 01:35:11
 *
 */
@@ -154,31 +154,63 @@ InitializeMenu()
     if(level.script == "cp_zmb"){ level.jailPos = (3356.53,-996.361, -195.873); level.freePos = (640.463,919.658,0.126336); level.EESong = "mus_pa_mw2_80s_cover";} else if(level.script == "cp_rave") { level.EESong = "mus_pa_rave_hidden_track"; } else if(level.script == "cp_disco") { level.EESong = "mus_pa_disco_hidden_track"; }
 }
 
-welcomeMessage(message, message2) {
+welcomeMessage(message, message2)
+{
     if (isDefined(self.welcomeMessage))
-        while (1) {
+        while (1)
+        {
             wait .05;
+
             if (!isDefined(self.welcomeMessage))
                 break;
         }
+
     self.welcomeMessage = true;
 
     hud = [];
-    //createtextWelc(text, font, scale, x, y, point, relativePoint, color, alpha, sort)
-    //createText(font, fontScale, align, relative, x, y, sort, alpha, text, color, movescale)
-    hud[0] = self createtextWelc(message,"small", 1.35, -500, -140 + 60, "CENTER", "CENTER",(255,255,255),1, 10);
-    hud[1] = self createtextWelc(message2,"small", 1.35, 500, -120 + 60,"CENTER", "CENTER",(255,255,255), 1,10);
 
-    hud[0] thread hudMoveX(-25, .35);
-    hud[1] thread hudMoveX(25, .35);
-    wait .35;
+    // Text
+    hud[1] = self createText("objective",1.15,"BOTTOMCENTER","BOTTOMCENTER",0,-84,10,0,message);
 
-    hud[0] thread hudMoveX(25, 3);
-    hud[1] thread hudMoveX(-25, 3);
+    hud[2] = self createText("objective",1.15,"BOTTOMCENTER","BOTTOMCENTER",0,-58,10,0,message2);
+
+    textLength = length(message);
+
+    if (length(message2) > textLength)
+        textLength = length(message2);
+
+    shaderWidth = (textLength * 16) + 150;
+
+    if (shaderWidth < 370)
+        shaderWidth = 370;
+
+    if (shaderWidth > 1100)
+        shaderWidth = 1100;
+
+    hud[0] = self createRectangle("BOTTOMCENTER","BOTTOMCENTER",0,-45,1,70,(0, 0, 0),"white",5,0);
+
+    hud[0] scaleOverTime(.35, shaderWidth, 70);
+    hud[0] fadeOverTime(.35);
+    hud[0].alpha = .85;
+    wait .15;
+
+    hud[1] fadeOverTime(.25);
+    hud[1].alpha = 1;
+
+    hud[2] fadeOverTime(.25);
+    hud[2].alpha = 1;
+
     wait 3;
+    hud[0] scaleOverTime(.35, 1, 70);
+    hud[0] fadeOverTime(.35);
+    hud[0].alpha = 0;
 
-    hud[0] thread hudMoveX(500, .35);
-    hud[1] thread hudMoveX(-500, .35);
+    hud[1] fadeOverTime(.35);
+    hud[1].alpha = 0;
+
+    hud[2] fadeOverTime(.35);
+    hud[2].alpha = 0;
+
     wait .35;
 
     self destroyAll(hud);

@@ -80,7 +80,7 @@ menuMonitor()
                     wait .12;
                 }
             
-                if(self useButtonPressed())
+                if(self useButtonPressed())//todo, fix sliders from int to str vals
                 {
                     Menu = self.eMenu[self getCursor()];
                     self PlayLocalSound("ui_consumable_meter_full");
@@ -291,7 +291,7 @@ addSlider(opt, val, min, max, inc, func, toggle, autofunc, p1, p2, p3)
     self.eMenu[self.eMenu.size] = slider;
 }
 
-addOptSlider(opt, strTok, func, toggle, autofunc, p1, p2, p3)
+addOptSlider(opt, strTok, func, toggle, autofunc, p1, p2, p3)//I should really fix this, so it doesn't rely on int for the str vals
 {
     if(self.storeMenu != self getCurrentMenu())
         return;
@@ -328,7 +328,7 @@ addSliderWithString(opt, List1, List2, func, p1, p2, p3, p4, p5)
     self.eMenu[self.eMenu.size] = optionlist;
 }
 
-updateSlider(pressed) 
+updateSlider(pressed) //todo: update from int to str
 {
     Menu = self.eMenu[self getCursor()];
     if(!IsDefined(self.sliders[self getCurrentMenu() + "_" + self getCursor()]))
@@ -351,7 +351,7 @@ updateSlider(pressed)
     self.sliders[self getCurrentMenu() + "_" + self getCursor()] = curs;
 }
 
-updateOptSlider(pressed)
+updateOptSlider(pressed)//todo: update from int to str
 {
     Menu = self.eMenu[self getCursor()];
     

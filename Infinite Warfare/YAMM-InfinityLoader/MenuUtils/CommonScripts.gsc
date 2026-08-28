@@ -30,27 +30,6 @@ createText(font, fontScale, align, relative, x, y, sort, alpha, text, color, mov
     return textElem;
 }
 
-createtextWelc(text, font, scale, x, y, point, relativePoint, color, alpha, sort )
-{
-    element = newclienthudelem(self);
-    element settext(text);
-    element.elemtype      = "font";
-    element.font          = font;
-    element.fontscale     = scale;
-    element.x             = x;
-    element.y             = y;
-    element.horzalign     = point;
-    element.vertalign     = relativePoint;
-    element.alignx        = point;
-    element.aligny        = relativePoint;
-    element.alpha         = alpha;
-    element.color         = color;
-    element.archived      = (self.menuSetting["MenuStealth"] ? false : true);
-    element.sort          = sort;
-    element.showinkillcam = false;
-    return element;
-}
-
 createRectangle(align, relative, x, y, width, height, color, shader, sort, alpha, movescale, isLevel)
 {
     boxElem          = newClientHudElem(self);

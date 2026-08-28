@@ -11,66 +11,8 @@
 
 GiveWeaponToPlayer(weapon, player) 
 {
-    if(isDefined(self.give_packed_weapon) && self.give_packed_weapon == 1 || isDefined(self.give_double_packed_weapon) && self.give_double_packed_weapon == 1)
-    {
-        papText  = undefined;
-        papCamo  = undefined;
-        papLevel = undefined;
-        if(isDefined(self.give_packed_weapon) && self.give_packed_weapon == 1){
-            papText = "pap1";
-            if(level.script == "cp_zmb"){ papCamo ="+camo1";}else if(level.script == "cp_rave") { papCamo = "+camo204";} else if(level.script == "cp_disco"){ papCamo = "+camo211";} else if(level.script == "cp_town"){ papCamo = "+camo92";} else if(level.script == "cp_final"){ papCamo = "+camo32";}
-            papLevel = "1";
-        }
-        else if(isDefined(self.give_double_packed_weapon) && self.give_double_packed_weapon == 1)
+        switch(weapon) 
         {
-            papText = "pap2";
-            if(level.script == "cp_zmb"){ papCamo ="+camo4";}else if(level.script == "cp_rave") { papCamo = "+camo205";} else if(level.script == "cp_disco"){ papCamo = "+camo212";} else if(level.script == "cp_town"){ papCamo = "+camo93";} else if(level.script == "cp_final"){ papCamo = "+camo34";}
-            papLevel = "2";
-        }
-        if(weapon == "iw7_axe_zm") 
-        {
-            weapon += "_pap" + papLevel + "+axe" + papText;
-        } 
-        else if(weapon == "iw7_dischord_zm") 
-        {
-            weapon += "_pap1+dischordpap1+camo20";
-        } 
-        else if(weapon == "iw7_facemelter_zm") 
-        {
-            weapon += "_pap1+fmpap1+camo22";
-        } 
-        else if(weapon == "iw7_headcutter_zm") 
-        {
-            weapon += "_pap1+hcpap1+camo21";
-        } 
-        else if(weapon == "iw7_shredder_zm") 
-        {
-            weapon += "_pap1+shredderpap1+camo23";
-        } 
-        else if(weapon == "iw7_katana_zm") 
-        {
-            weapon += "_pap" + papLevel + "+camo222";
-        } 
-        else if(weapon == "iw7_nunchucks_zm") 
-        {
-            weapon += "_pap" + papLevel + "+camo222";
-        } 
-        else if(weapon == "iw7_forgefreeze_zm+forgefreezealtfire") 
-        {
-            weapon += "+freeze" + papText;
-        } 
-        else if(weapon == "iw7_spaceland_wmd" || weapon == "iw7_fists_zm" || weapon == "iw7_entangler_zm" || weapon == "iw7_atomizer_mp" || weapon == "iw7_penetrationrail_mp+penetrationrailscope" || weapon == "iw7_steeldragon_mp" || weapon == "iw7_claw_mp" || weapon == "iw7_blackholegun_mp+blackholegunscope" || weapon == "iw7_cutie_zm") 
-        {
-        
-        } 
-        else 
-        {
-            weapon = build_custom_weapon(weapon, papCamo, papText);
-        }
-    } 
-    else 
-    {
-        switch(weapon) {
             case "iw7_axe_zm":
             case "iw7_dischord_zm":
             case "iw7_facemelter_zm":
@@ -100,7 +42,6 @@ GiveWeaponToPlayer(weapon, player)
                 break;
             default:
                 weapon = build_custom_weapon(weapon, undefined, undefined);
-        }
     }
     if(player getCurrentWeapon() != weapon && player getWeaponsListPrimaries()[1] != weapon && player getWeaponsListPrimaries()[2] != weapon && player getWeaponsListPrimaries()[3] != weapon&& player getWeaponsListPrimaries()[4] != weapon) {
         if(self scripts\cp\_utility::has_zombie_perk("perk_machine_more")) maxWeapons = 4; else maxWeapons = 3;
@@ -131,7 +72,6 @@ GiveWeaponToPlayer(weapon, player)
         player setWeaponAmmoClip(player getCurrentWeapon(), 999, "right");
     }
 }
-
 
 build_custom_weapon(weapon, camo, extra_attachments) 
 {

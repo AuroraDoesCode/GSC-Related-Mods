@@ -49,7 +49,7 @@ setLobbyTimer(time)
 
 FastRestartGame()
 {
-    map_restart(0);
+    map_restart(true);//true to remember custom dvars
 }
 
 
