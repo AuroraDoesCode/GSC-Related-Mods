@@ -65,16 +65,19 @@ menuOptions()
             self addMenu("Lobby Manipulation", "Lobby Manipulation");
                 self addOpt("Max Bank Amount", ::MaxBank);
                 self addOpt("Zombies Options", ::newMenu, "Zombies Options");
-                if(level.script != "cp_town")
-                {
+                self addOpt("Powerup Options", ::newMenu, "Powerup Menu");
                     self addOpt("Open All Doors", ::ClearDoorsAndDebris);
                     self addOpt("Turn On Power", ::TurnOnPower);
-                }
                 self addSlider("Edit Round", level.wave_num,1,999,1,::EditRound);
                 self addOpt("Max Round", ::MaxRound);
                 self addToggleOpt("Freeze the Wheel", ::NoMovingWheel, level.noMoveBox);
                 self addToggleOpt("Toggle Force Host", ::ToggleForceHost, self.ForcingHost);
                 break;
+        case "Powerup Menu":
+            self addMenu("Powerup Menu", "Powerup Menu");
+                for(t = 0; t < level._PowerupDropLoot.size; t++)
+                self addOpt(constructString(replaceChar(level._PowerupDropLoot[t], "_", " ")), ::spawn_powerup, level._PowerupDropLoot[t]);
+            break;
         case "Zombies Options":
             self addMenu("Zombies Options", "Zombies Options");
                 self addOpt("Kill All Zombies", ::killAllZombies);
@@ -130,6 +133,8 @@ menuOptions()
         case "Radioactive Thing":
             self addMenu("Radioactive Thing", "Attack of the Radioactive Thing");
                 self addOpt("Play Brackyura boogie", ::PlayAudioToClients, "mus_pa_town_hidden_track");
+				self addSlider("Complete EE Step", 0,0,12,1,::AttackEESteps);
+				self addOpt("Spawn Chemical Recording", ::spawn_film_reel_hints);
                 self addOpt("Activate Ghosts N Skulls", ::CompleteGnS);
             break;
         case "Beast from Beyond":

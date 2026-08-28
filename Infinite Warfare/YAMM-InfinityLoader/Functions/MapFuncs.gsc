@@ -84,38 +84,38 @@ beast_open_sesame()
     }
 }
 
-CombineArrays(param_00,param_01,param_02,param_03)
+CombineArrays(array1,array2,array3,array4)
 {
-    var_04 = [];
-    if(isdefined(param_00))
+    FinalArray = [];
+    if(isdefined(array1))
     {
-        foreach(var_06 in param_00)
+        foreach(item in array1)
         {
-            var_04[var_04.size] = var_06;
+            FinalArray[FinalArray.size] = item;
         }
     }
 
-    if(isdefined(param_01))
+    if(isdefined(array2))
     {
-        foreach(var_06 in param_01)
+        foreach(item in array2)
         {
-            var_04[var_04.size] = var_06;
+            FinalArray[FinalArray.size] = item;
         }
     }
 
-    if(isdefined(param_02))
+    if(isdefined(array3))
     {
-        foreach(var_06 in param_02)
+        foreach(item in array3)
         {
-            var_04[var_04.size] = var_06;
+            FinalArray[FinalArray.size] = item;
         }
     }
 
-    if(isdefined(param_03))
+    if(isdefined(array4))
     {
-        foreach(var_06 in param_03)
+        foreach(item in array4)
         {
-            var_04[var_04.size] = var_06;
+            FinalArray[FinalArray.size] = item;
         }
     }
 }
@@ -317,4 +317,496 @@ payphone_ringing(param_00)
 	param_00 waittill("phone_answered",var_02);
 	level.player_answered_phone = var_02;
 	var_01 delete();
+}
+
+/*
+Attack of The Radioactive Thing
+*/
+
+//Utilities
+set_quest_omnvar_by_targetname(player)//required for Attack EE Step
+{
+	partId = 0;
+	switch(player.var_336)
+	{
+		case "mpq_zom_head_part":
+			partId = 1;
+			break;
+
+		case "mpq_zom_torso_part":
+			partId = 6;
+			break;
+
+		case "mpq_zom_l_arm_part":
+			partId = 2;
+			break;
+
+		case "mpq_zom_r_arm_part":
+			partId = 3;
+			break;
+
+		case "mpq_zom_l_leg_part":
+			partId = 4;
+			break;
+
+		case "mpq_zom_r_leg_part":
+			var_01 = 5;
+			break;
+
+		case "mpq_punch_card":
+			partId = 10;
+			break;
+
+		case "car_mirror_ground":
+		case "mirror":
+			partId = 7;
+			break;
+
+		case "elvira_mirror":
+			partId = 8;
+			break;
+
+		case "bathroom_mirror_piece":
+			var_01 = 9;
+			break;
+	}
+
+	if(var_01 > 0)
+	{
+		scripts\cp\_utility::set_quest_icon(var_01);
+	}
+}
+
+take_bomb_part(player,param_01)
+{
+	var_02 = getent(player.target,"targetname");
+	if(!isdefined(var_02))
+	{
+		return;
+	}
+
+	switch(var_02.model)
+	{
+		case "cp_town_teleporter_device_projector":
+	
+			scripts\cp\_utility::set_quest_icon(16);
+			break;
+
+		case "cp_town_teleporter_device_pipes":
+			scripts\cp\_utility::set_quest_icon(17);
+			break;
+
+		default:
+			scripts\cp\_utility::set_quest_icon(18);
+			break;
+	}
+
+	playfx(level._effect["generic_pickup"],var_02.origin);
+	param_01 playlocalsound("zmb_item_pickup");
+	level.teleporter_pieces_found++;
+	var_02 delete();
+}
+
+spawn_garage_key(player)//Required for Attack EE
+{
+	level.key_fx = spawnfx(level._effect["locker_key"],self.origin + (0,0,32));
+	wait(0.2);
+	triggerfx(level.key_fx);
+}
+
+//ee steps
+AttackEESteps(step)
+{
+	switch(step)
+	{
+		case 1:
+			foreach(bodypart in level.mpq_zom_body_parts)
+			{
+				set_quest_omnvar_by_targetname(bodypart);
+				self scripts\cp\_utility::set_quest_icon(bodypart);
+				bodypart hide();
+				wait(0.1);
+			}
+
+			level.leg_knocked_down = 1;
+			var_03 = getent("mpq_zom_l_leg_part_ground","targetname");
+			if(isdefined(var_03))
+			{
+				var_03 hide();
+			}
+
+			level.mpq_zom_parts_picked_up["head"] = 1;
+			level.mpq_zom_parts_picked_up["torso"] = 1;
+			level.mpq_zom_parts_picked_up["left_arm"] = 1;
+			level.mpq_zom_parts_picked_up["right_arm"] = 1;
+			level.mpq_zom_parts_picked_up["left_leg"] = 1;
+			level.mpq_zom_parts_picked_up["right_leg"] = 1;
+			level.mpq_zom_parts_index = level.mpq_zom_parts_picked_up.size;
+			break;
+		case 2:
+			punchCard = getent("mpq_punch_card","targetname");
+			punchCard hide();
+			set_quest_omnvar_by_targetname("mpq_punch_card");
+			self scripts\cp\_utility::set_quest_icon("mpq_punch_card");
+			level.punch_card_acquired = 1;
+			break;
+		case 3:
+			var_00 = getent("elvira_mirror","targetname");
+			var_00 hide();
+			level.mirrors_picked_up["elvira_mirror"] = 1;
+			set_quest_omnvar_by_targetname(var_00);
+			self scripts\cp\_utility::set_quest_icon(var_00);
+			var_00 = getent("car_mirror","targetname");
+			var_00 hide();
+			var_00 = getent("car_mirror_ground","targetname");
+			var_00 hide();
+			level.mirrors_picked_up["car_mirror_ground"] = 1;
+			set_quest_omnvar_by_targetname(var_00);
+			self scripts\cp\_utility::set_quest_icon(var_00);
+			var_00 = getent("bathroom_mirror_piece","targetname");
+			var_00 hide();
+			level.mirrors_picked_up["bathroom_mirror_piece"] = 1;
+			set_quest_omnvar_by_targetname(var_00);
+			self scripts\cp\_utility::set_quest_icon(var_00);
+			var_01 = scripts\common\utility::getstructarray("mirror_placement","script_noteworthy");
+			foreach(var_03 in var_01)
+			{
+				var_04 = scripts\common\utility::getstruct(var_03.target,"targetname");
+				var_00 = spawn("script_model",var_04.origin);
+				var_00.angles = var_04.angles;
+				var_00 setmodel(var_04.script_noteworthy);
+			}
+
+			level.mirrors_placed["car_mirror"] = 1;
+			level.mirrors_placed["bathroom_mirror"] = 1;
+			level.mirrors_placed["elvira_mirror"] = 1;
+			break;
+		case 4:
+			foreach(var_01 in level.mpq_zom_parts)
+			{
+				var_01 hide();
+			}
+
+			level.knife_throw_target_body show();
+			level.body_made = 1;
+			level.terminal_unlocked = 1;
+			break;
+		case 5: level.polarity_reversed = 1; break;
+		case 6: level.knife_throw_target_body hide();
+				spawn_garage_key(self.origin);
+				level.key_spawned = 1;level scripts\cp\_utility::set_completed_quest_mark(1);
+                level.garage_key_found=1;
+				break;
+		case 7: 
+        thread take_bomb_part("bomb_teleport_part", undefined); 
+		scripts\common\utility::flag_set("chemistry_step1");scripts\common\utility::flag_set("chemistry_step2");scripts\common\utility::flag_set("chemistry_step3"); scripts\common\utility::flag_set("chemistry_step4");break;
+		case 8: scripts\common\utility::flag_set("launchcode_step1");	scripts\common\utility::flag_set("launchcode_step2"); self scripts\cp\_utility::set_quest_icon(20); break;
+		case 9: scripts\common\utility::flag_set("launchcode_step3"); level.teleporter_pieces_placed = 3; level.teleporter_pieces_found = 3; scripts\cp\_utility::set_quest_icon(16); scripts\cp\_utility::set_quest_icon(17); scripts\cp\_utility::set_quest_icon(18); scripts\common\utility::flag_set("launchcode_step3"); break;
+		case 10: 	var_01 = scripts\common\utility::getstruct("place_bomb_parts","script_noteworthy");
+	var_02 = getent(var_01.target,"targetname");
+	playfxontag(level._effect["vfx_bomb_portal_charged"],var_02,"tag_bomb");
+	scripts\cp\_interaction::add_to_current_interaction_list(Var_02);
+	scripts\common\utility::flag_set("teleporter_charged"); scripts\common\utility::flag_set("teleporter_charged"); break;
+    case 11: var_00 = scripts\common\utility::getstruct("place_bomb_parts","script_noteworthy");
+	var_01 = getent(var_00.target,"targetname");
+	playfx(level._effect["vfx_bomb_portal_out"],var_01.origin);
+	var_01 delete();
+	scripts\common\utility::flag_set("launchcode_step4");
+    break;
+    case 12: 
+    level.bomb_detonation_attempts=1;
+	level notify("nuclear_bomb_armed");
+    end_detonate_bomb();
+    break;
+	}
+	self iPrintLnAlt("Completed EE Step " +step);
+}
+
+AttackOpenSesame()
+{
+	var_00 = scripts\common\utility::getstructarray("missing_handle","script_noteworthy");
+	scripts\cp\_interaction::remove_from_current_interaction_list(var_00);
+	scripts\common\utility::flag_set("found_missing_handle");
+	self playlocalsound("part_pickup");
+	var_00.model delete();
+	scripts\common\utility::flag_set("placed_missing_handle");
+	wait(1);
+	level notify("found_power");
+	level notify("activate_power");
+	wait 1;
+	self thread usebrokengenerator();
+}
+
+usebrokengenerator()
+{
+		player = "missing_handle";
+		scripts\cp\_interaction::remove_from_current_interaction_list(player);
+		player.fixed = 1;
+		self playlocalsound("part_pickup");
+		var_02 = scripts\common\utility::getstruct(player.target,"targetname");
+		var_03 = spawn("script_model",var_02.origin);
+		if(isdefined(var_02.angles))
+		{
+			var_03.angles = var_02.angles;
+		}
+
+		var_03 setmodel("icbm_electricpanel_switch_02");
+		var_03.script_noteworthy = var_02.script_noteworthy;
+		var_03.script_parameters = var_02.script_parameters;
+		player.handle = var_03;
+		player.handle.script_noteworthy = "-pitch";
+		scripts\common\utility::flag_set("placed_missing_handle");
+		level notify("found_power");
+		wait(1);
+		var_05 = getent("box","script_noteworthy");
+		var_05 setmodel("icbm_electricpanel9_on");
+		taketrapparticon("lever");
+		setomnvar("zm_ui_color_eye_ent",level.color_eye);
+
+		foreach(generator in level.var_773B)//foreach(generator in level.generators)
+        {
+            thread lib_0D51::func_7757(generator);//func_7757 = generic_generator(generator);
+            wait(0.1);
+        }
+
+		if(isdefined(level.fast_travel_spots))
+		{
+			foreach(portal in level.fast_travel_spots)
+			{
+				 portal.activated = 1;//isPortalActive
+                 portal.var_13068 = 1;//used portal to PAP
+                 if(isDefined(portal.var_C626)) 
+                    portal.var_C626 = 0;
+			}
+		}
+
+		var_07 = getentarray("door_buy","targetname");
+		foreach(var_09 in var_07)
+		{
+			var_09 notify("trigger","open_sesame");
+			wait(0.1);
+		}
+
+		var_0B = getentarray("chi_door","targetname");
+		foreach(var_09 in var_0B)
+		{
+			var_09.var_289 notify("damage",undefined,"open_sesame");
+			wait(0.1);
+		}
+
+		level.moon_donations = 3;
+		level.kepler_donations = 3;
+		level.triton_donations = 3;
+		if(isDefined(level.team_killdoors))
+        {
+        foreach(teamDoor in level.team_killdoors)
+        {
+            teamDoor thread lib_0D4C::open_team_killdoor(level.players[0]);
+        }
+        }
+
+		doorInteracts = scripts\common\utility::getstructarray("interaction","targetname");
+    foreach(interact in doorInteracts)
+    {
+        doorTrigger = scripts\common\utility::getstructarray(interact.script_noteworthy,"script_noteworthy");
+        foreach(trigger in doorTrigger)
+        {
+            if(isDefined(trigger.target) && isDefined(interact.trigger))
+            {
+                if(trigger.target == interact.target && trigger != interact)
+                {
+                    if(scripts\common\utility::func_2286(doorInteracts,trigger))
+                    {
+                        doorInteracts = scripts\common\utility::func_22A9(doorInteracts,trigger);
+                    }
+                }
+            }
+        }
+        if(scripts\cp\_interaction::func_9A18(interact))
+        {
+            if(!isDefined(interact.script_noteworthy))
+            {
+                continue;
+            }
+            if(interact.script_noteworthy == "team_door_switch")
+            {
+                scripts\cp\zombies\interaction_openareas::func_1302F(interact,level.players[0]);
+            }
+        }
+    }
+}
+
+spawn_film_reel_hints()
+{
+	var_00 = spawn("script_model",(4070,-4190,16));
+	wait(0.1);
+	var_00 setmodel("cp_town_film_reel_case");
+}
+taketrapparticon(trapname)
+{
+	trapId = 0;
+	switch(trapname)
+	{
+		case "electric":
+			trapId = 6;
+			break;
+
+		case "propane":
+			trapId = 8;
+			break;
+
+		case "freeze":
+			trapId = 7;
+			break;
+
+		case "pool":
+			trapId = 5;
+			break;
+
+		case "lever":
+			trapId = 9;
+			break;
+
+		default:
+			break;
+	}
+
+	if(trapId > 0)
+	{
+		foreach(player in level.players)
+		{
+			player setclientomnvarbit("zm_charms_active",trapId,0);
+		}
+	}
+}
+
+//Function Number: 50
+givetrapparticon(trapname)
+{
+	trapId = 0;
+	switch(trapname)
+	{
+		case "electric":
+			trapId = 6;
+			break;
+
+		case "propane":
+			trapId = 8;
+			break;
+
+		case "freeze":
+			trapId = 7;
+			break;
+
+		case "pool":
+			trapId = 5;
+			break;
+
+		case "lever":
+			trapId = 9;
+			break;
+
+		default:
+			break;
+	}
+
+	foreach(player in level.players)
+	{
+		player setclientomnvarbit("zm_charms_active",trapId,1);
+	}
+}
+
+
+end_detonate_bomb()
+{
+	level thread crab_boss_death_sequence();
+	level notify("end_detonate_bomb");
+}
+
+//Function Number: 14
+crab_boss_death_sequence()
+{
+	scripts\common\utility::func_6E2A("boss_fight_active");
+	scripts\common\utility::flag_set("boss_fight_finished");
+	if(scripts\cp\zombies\direct_boss_fight::should_directly_go_to_boss_fight())
+	{
+		level.crab_boss.nocorpse = 1;
+		level.crab_boss suicide();
+		level thread scripts\cp\zombies\direct_boss_fight::success_sequence(5,4);
+		return;
+	}
+
+	if(isdefined(level.crab_boss))
+	{
+		level thread crab_boss_death_anim_sequence(level.crab_boss);
+	}
+
+	scripts\cp\maps\cp_town\cp_town_crab_boss_fight::move_lost_and_found("tent");
+	level.force_respawn_location = undefined;
+	level.disable_loot_fly_to_player = 0;
+	level.loot_time_out = undefined;
+	level.var_13BD6 = undefined;
+	level notify("crab_boss_fight_complete");
+	level thread clear_existing_enemies();
+	level thread delay_resume_wave_progression();
+	level.defeated_crogboss=1;
+    foreach(var_01 in level.players)
+	{
+		var_01 scripts\cp\_merits::func_D9AD("mt_dlc3_boss_killed");
+		var_01 setplayerdata("cp","haveSoulKeys","any_soul_key",1);
+		var_01 setplayerdata("cp","haveSoulKeys","soul_key_4",1);
+		var_01 lib_0D2A::func_12D7C("SOUL_LESS",1);
+		if(!var_01 scripts\cp\_utility::isteleportenabled())
+		{
+			var_01 scripts\cp\_utility::allow_player_teleport(1);
+		}
+
+		if(var_01.var_134FD == "p5_")
+		{
+			var_01 lib_0D2A::func_12D7C("UNPLEASANT_DREAMS",1);
+		}
+	}
+
+	level scripts\cp\_utility::set_completed_quest_mark(4);
+}
+
+crab_boss_death_anim_sequence(param_00)
+{
+	level endon("game_ended");
+	if(isalive(param_00))
+	{
+		param_00 scripts\aitypes\crab_boss\behaviors::dodeath(1);
+		param_00.nocorpse = 1;
+		param_00 suicide();
+	}
+
+	scripts\cp\zombies\zombies_spawning::func_4FB8(1);
+	level.crab_boss = undefined;
+}
+
+delay_resume_wave_progression()
+{
+	level endon("game_ended");
+	wait(71.15);
+	resume_spawn_wave();
+}
+
+//Function Number: 18
+resume_spawn_wave()
+{
+	level.dont_resume_wave_after_solo_afterlife = undefined;
+	level.var_13FA3 = 0;
+	scripts\common\utility::func_6E2A("pause_wave_progression");
+}
+
+clear_existing_enemies()
+{
+	foreach(var_01 in level.spawned_enemies)
+	{
+		var_01.var_54CB = 1;
+		var_01.nocorpse = 1;
+		var_01 suicide();
+	}
+
+	scripts\common\utility::func_136F7();
 }

@@ -71,13 +71,14 @@ TurnOnPower()
 
 ClearDoorsAndDebris()
 {
+    if(level.mapName == "cp_town"){ thread AttackOpenSesame(); return;}
     doorArray = ["door_buy","chi_door"];
     foreach(door in doorArray)
     {
         switch(door)
         {
             case "door_buy" : doors = getentarray(door, "targetname"); foreach(door2 in doors){ door2 notify("trigger","open_sesame");wait .01;} break;
-            case "chi_door" : chidoors = getentarray(door,"targetname"); foreach(chidoor in chidoors){ chidoor.physics_capsulecast notify("damage",undefined, "open_sesame"); wait .01;} break;
+            case "chi_door" : chidoors = getentarray(door,"targetname"); foreach(chidoor in chidoors){ chidoor.var_289 notify("damage",undefined, "open_sesame"); wait .01;} break;
         }
     }
     level.moon_donations   = 3;

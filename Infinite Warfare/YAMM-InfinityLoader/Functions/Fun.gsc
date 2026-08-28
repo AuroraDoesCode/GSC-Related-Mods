@@ -116,3 +116,6 @@ skyTrip()
     self iPrintlnAlt("Wait For The Current Sky Trip To Finish");
 }
  
+ spawn_powerup(powerup) {
+	level scripts\cp\loot::drop_loot(self.origin + anglesToForward(self.angles) * 115, undefined, powerup, undefined, undefined, 1);
+}

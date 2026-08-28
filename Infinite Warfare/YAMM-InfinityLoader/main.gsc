@@ -249,4 +249,30 @@ setPlayerAtPoint(origin, angles)
     self setOrigin(origin);
     self setPlayerAngles(angles);
 }
-   
+replaceChar(string, substring, replace)
+{
+    final = "";
+    for(e=0;e<string.size;e++)
+    {
+        if(string[e] == substring)
+            final += replace;
+        else 
+            final += string[e];
+    }
+    return final;
+}
+
+constructString(string)
+{
+    final = "";
+    for(e=0;e<string.size;e++)
+    {
+        if(e == 0)
+            final += toLower(string[e]);
+        else if(string[e-1] == " ")
+            final += toLower(string[e]);
+        else 
+            final += string[e];
+    }
+    return final;
+}
