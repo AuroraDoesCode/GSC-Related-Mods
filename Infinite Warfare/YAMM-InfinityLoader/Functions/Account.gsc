@@ -94,7 +94,6 @@ SetPlayerMaxWeaponRanks(player)
         
             player SetPlayerData("common", "sharedProgression", "weaponLevel", weapon, "cpXP", 54300);
         player SetPlayerData("common", "sharedProgression", "weaponLevel", weapon, "prestige", 3);
-        
         wait 0.01;
     }
     self iPrintLnAlt("Weapon Levels ^2Maxed");
@@ -141,7 +140,7 @@ UnlockTalismans(player)
 
 GetKeyCount()
 {
-    keyCount = self GetPlayerData("cp","progression","keys");
+    keyCount = self GetPlayerData("common","sharedProgression","keys");
 if(!isDefined(keyCount)){ self iPrintLnAlt("Wrong Player Data"); return;}
     self iPrintLnAlt("You Currently Have: "+keyCount+" Keys");
 }

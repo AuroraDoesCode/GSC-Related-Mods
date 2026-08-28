@@ -104,7 +104,7 @@ InitializeMenu()
     level.Status            = ["^1Unverified", "^3Verified", "^4VIP", "^6Admin", "^5Co-Host", "^2Host"];
     level.RGB               = ["Red", "Green", "Blue"];
     level.patchName         = "YetAnotherModMenu";
-    level.creatorName       = "TheUnknownCoder";
+    level.creatorName       = "AuroraDoesCode";
     level.TimerTime         = "Not Set";
     level.CustomWeapsCategs = ["Assault Rifles","Tactical Rifles","Light Machine Guns","Misc Weapons","Pistols","Projectile Weapons","Shields","Shotguns","Submachine Guns","Sniper Rifles"];
     level._MenuWeapons      = getArrayKeys(level.var_B15E);//level.var_1BED = level.all_magic_weapons, level.var_B15E = level.magic_weapons
@@ -146,6 +146,7 @@ InitializeMenu()
     level.papCamoSS         = ["+camo211","+camo212"];
     level.papCamoRT         = ["+camo92","+camo93"];
     level.papCamoBB         = ["+camo32","+camo34"];
+    level._PowerupDropLoot = GetArrayKeys(level.var_163F);//level.
     level.pickupLoot        = ["power_bioSpike","power_c4","power_clusterGrenade","power_concussionGrenade","power_frag","power_gasGrenade","power_semtex","power_splashGrenade"];
     level.pickupLootName    = ["Bio Spikes","C4","Cluster Grenades","Concussion Grenades","Frag Grenades","Gas Grenades","Semtex Grenades", "Splash Grenades"];
     level.pickupPowers      = ["power_speedBoost","power_teleport","power_transponder","power_cloak","power_barrier","power_mortarMount"];
@@ -163,8 +164,10 @@ welcomeMessage(message, message2) {
     self.welcomeMessage = true;
 
     hud = [];
-    hud[0] = self createText("small", 1.35, "CENTER", "CENTER", -500, -140 + 60, 10, 1, message);
-    hud[1] = self createText("small", 1.35, "CENTER", "CENTER", 500, -120 + 60, 10, 1, message2);
+    //createtextWelc(text, font, scale, x, y, point, relativePoint, color, alpha, sort)
+    //createText(font, fontScale, align, relative, x, y, sort, alpha, text, color, movescale)
+    hud[0] = self createtextWelc(message,"small", 1.35, -500, -140 + 60, "CENTER", "CENTER",(255,255,255),1, 10);
+    hud[1] = self createtextWelc(message2,"small", 1.35, 500, -120 + 60,"CENTER", "CENTER",(255,255,255), 1,10);
 
     hud[0] thread hudMoveX(-25, .35);
     hud[1] thread hudMoveX(25, .35);

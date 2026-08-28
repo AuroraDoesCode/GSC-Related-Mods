@@ -34,26 +34,14 @@ menuOptions()
             self addOpt("GameModes", ::newMenu, "GameModes");}
             break;
         case "Personal Modifications":
-            self addMenu("Personal Modifications", "Personal Modifications");
-            self addToggleOpt("Toggle God Mode", ::Godmode, self.godmode);
-            self addToggleOpt("Toggle No Clip", ::no_clip, self.noclip);
-            self addToggleOpt("Toggle Infinite Ammo", ::ToggleAmmo, self.UnlimAmmo);
-            self addToggleOpt("Toggle Third Person", ::ThirdPerson, self.thirdPerson);
-            self addOpt("Score Menu", ::newMenu, "Score Menu");
-            self addOpt("Random Teleport", ::ActivateFAF, "anywhere_but_here", self);
-            self addOpt("Give All Perks", ::AllPerks, self);
-            self addSlider("Edit Movement Speed", 0,0,15,1,::EditSpeed);
-            self addToggleOpt("Toggle Speed Change", ::SpeedToggle, self.speedToggle);
-            break;
         case "Score Menu":
-            self addMenu("Score Menu", "Score Menu");
-            self addSlider("Add Score", self getplayerdata("cp","alienSession","currency"), 0, self.var_B48A, 1000, ::AddScore, undefined, undefined, self);
-            self addSlider("Remove Score", self getplayerdata("cp","alienSession","currency"), 0, self.var_B48A, 1000, ::TakeScore, undefined, undefined, self);
-            self addOpt("Max Out Score", ::MaxScore, self);
+            self CreatePersonalMenuOptions();
             break;
         case "Menu Customisation":
             self addMenu("Menu Customisation", "Menu Customisation");
                 self addOpt("Menu Colours", ::newMenu, "MenuColour");
+                self addOpt("Change Theme To Physics N Flex", ::ChangeTheme, 1);
+                self addOpt("Change Theme To Synergy V3", ::ChangeTheme, 0);
                 self addOpt("Reposition Menu", ::MoveMenu);
             break;
         case "MenuColour":
@@ -260,7 +248,7 @@ menuOptions()
             break;
         case "Shaolin Shuffle":
             self addMenu("Shaolin Shuffle", "Shaolin Shuffle");
-                self addOpt("Play Beat of the Drum", ::PlayAudioToClients, "mus_pa_disco_hidden_track");
+                self addOpt("Play Fat Cats Song", ::PlayAudioToClients, "mus_pa_disco_hidden_track");
                 self addOpt("Activate Ghosts N Skulls", ::CompleteGnS);
             break;
 

@@ -144,7 +144,7 @@ MaxRound()
         level notify("wave_complete");
         self iPrintLnAlt("Round Changing to: 2147483647 in TWO SECONDS!");
         wait 2;
-        level.wave_num = 2147483647;
+        level.wave_num = 2147483646;
         thread killAllZombies();
     }
 }

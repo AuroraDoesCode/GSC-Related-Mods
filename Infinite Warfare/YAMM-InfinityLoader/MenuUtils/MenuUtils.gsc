@@ -159,7 +159,17 @@ scrollingSystem()
 updateScrollbar()
 {
     curs = ((self getCursor() >= 8) ? 7 : self getCursor());
-    self.menu["UI"]["SCROLL"].y = (self.menu["OPT"][0].y + (curs*15));
+    if(self.menu["Theme"]["Default"] == true)
+    {
+        self.menu["UI"]["SCROLL"].y =
+            self.menu["OPT"][0].y + (curs * 15);
+    }
+    else if(self.menu["Theme"]["Flex"] == true)
+    {
+        self.menu["UI"]["SCROLL"].y =
+            self.menu["OPT"][0].y + (curs * 12);
+    }
+
     if(IsDefined(self.eMenu[self getCursor()].val))
         self updateSlider();
         
@@ -337,7 +347,7 @@ updateSlider(pressed)
     
     cur = ((self getCursor() >= 8) ? 7 : self getCursor());
     if(curs != Menu.val)
-        self.menu["OPT"]["OPTScroll"][cur] setText("" + curs);
+        self.menu["OPT"]["OPTScroll"][cur] SetText("" + curs);
     self.sliders[self getCurrentMenu() + "_" + self getCursor()] = curs;
 }
 
@@ -360,7 +370,7 @@ updateOptSlider(pressed)
         curs = Menu.optSlide.size-1;
 
     cur = ((self getCursor() >= 8) ? 7 : self getCursor());
-    self.menu["OPT"]["OPTScroll"][cur] setText(Menu.optSlide[curs] + " [" + (curs+1) + "/" + Menu.optSlide.size + "]");
+    self.menu["OPT"]["OPTScroll"][cur] SetText(Menu.optSlide[curs] + " [" + (curs+1) + "/" + Menu.optSlide.size + "]");
     self.Optsliders[self getCurrentMenu() + "_" + self getCursor()] = curs;
 }
 
@@ -420,8 +430,7 @@ menuClose()
     if(bool(self.menuSetting["MenuFreeze"]))
         self FreezeControls(false);
     self destroyAll(self.menu["UI"]);
-    self destroyAll(self.menu["OPT"]);
-    self destroyAll(self.menu["OPT"]["OPTScroll"]);
+    self destroyAll(self.menu["OPT"]);    self destroyAll(self.menu["OPT"]["OPTScroll"]);
 }
 
 onPlayerDisconnect(player)
@@ -440,4 +449,14 @@ onPlayerDisconnect(player)
 setcursor(value, menu)
 {
     self.menu[menu + "_cursor"] = value;
+}
+
+
+ChangeTheme(which)
+{
+    switch(which)
+    {
+        case 0: if(self.menu["Theme"]["Default"] == true) {self iPrintLnAlt("Theme is Already Synergy V3"); return;} self menuClose(); wait .2; self.menu["Theme"]["Default"] = true; self.menu["Theme"]["Flex"]=false; self thread menuOpen(); wait .1; self iPrintLnAlt("Menu Theme Changed To: Synergy V3"); self MenuSave(); break;
+        case 1: if(self.menu["Theme"]["Flex"] == true) {self iPrintLnAlt("Theme is Already Physics N Flex"); return;} self menuClose(); wait .2; self.menu["Theme"]["Default"] = false; self.menu["Theme"]["Flex"] = true; self thread menuOpen(); wait .1; self iPrintLnAlt("Menu Theme Changed To: Physics N Flex"); self MenuSave(); break;
+    }
 }

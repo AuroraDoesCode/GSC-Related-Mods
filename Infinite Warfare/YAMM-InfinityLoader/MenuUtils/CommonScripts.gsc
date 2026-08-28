@@ -16,7 +16,7 @@ createText(font, fontScale, align, relative, x, y, sort, alpha, text, color, mov
     if(IsDefined(movescale))
         y += self.menuSetting["MenuY"];
     textElem = scripts\cp\_utility::createfontstring(font,fontscale);
-    textElem setText(text);
+    textElem SetText(text);
     textElem.archived = (self.menuSetting["MenuStealth"] ? false : true);
     textElem scripts\cp\_utility::setpoint(align, relative, x, y);
     textElem.hideWhenInMenu = (self.menuSetting["MenuStealth"] ? true : false);
@@ -30,34 +30,25 @@ createText(font, fontScale, align, relative, x, y, sort, alpha, text, color, mov
     return textElem;
 }
 
-createTextWelcome(font, fontScale, align, relative, x, y, sort, alpha, text, color, movescale, isLevel)//I should really just fix this instead of fucking around.
-{  
-    textElem                = scripts\cp\_utility::createfontstring(font,fontscale);
-    textElem.font           = font;
-    textElem.fontscale      = fontScale;
-    textElem.alpha          = alpha;
-    textElem.sort           = sort;
-    textElem.foreground     = true;
-    textElem.hideWhenInMenu = (self.menuSetting["MenuStealth"] ? true : false);
-    textElem.archived       = false;
-    if(IsDefined(movescale))
-        x += self.menuSetting["MenuX"];
-        
-    if(IsDefined(movescale))
-        y += self.menuSetting["MenuY"];
-      textElem.x         = x;
-      textElem.y         = y;
-      textElem.alignX    = align;
-      textElem.alignY    = relative;
-      textElem.horzAlign = align;
-      textElem.vertAlign = relative;
-    if(color != "rainbow")
-        textElem.color = color;
-    else
-        textElem.color = level.rainbowColour;
-    textElem.text = text;
-    textElem setText(text);
-    return textElem;
+createtextWelc(text, font, scale, x, y, point, relativePoint, color, alpha, sort )
+{
+    element = newclienthudelem(self);
+    element settext(text);
+    element.elemtype      = "font";
+    element.font          = font;
+    element.fontscale     = scale;
+    element.x             = x;
+    element.y             = y;
+    element.horzalign     = point;
+    element.vertalign     = relativePoint;
+    element.alignx        = point;
+    element.aligny        = relativePoint;
+    element.alpha         = alpha;
+    element.color         = color;
+    element.archived      = (self.menuSetting["MenuStealth"] ? false : true);
+    element.sort          = sort;
+    element.showinkillcam = false;
+    return element;
 }
 
 createRectangle(align, relative, x, y, width, height, color, shader, sort, alpha, movescale, isLevel)

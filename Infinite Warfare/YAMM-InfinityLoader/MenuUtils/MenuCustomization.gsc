@@ -11,6 +11,8 @@
 
 MenuSave()
 {
+    ThemeValue = (self.menu["Theme"]["Flex"] == true ? 1 : 0);
+
     SaveDesgin = 
         SetMenuBool(self.menuSetting["MenuFreeze"]) +";"+
         SetMenuBool(self.menuSetting["MenuStealth"]) +";"+
@@ -33,8 +35,9 @@ MenuSave()
         self.menuSetting["MenuX"] +";"+
         self.menuSetting["MenuY"] +";"+
         SetMenuBool(self.menuSetting["MenuGodmode"]) +";"+
-        SetMenuBool(self.menuSetting["ShowClientINFO"]);
-    
+        SetMenuBool(self.menuSetting["ShowClientINFO"]) +";"+
+        ThemeValue;
+
     setDvar(self getName() + "MenuDesign", SaveDesgin);
 }
 
@@ -43,7 +46,7 @@ MenuLoad(Val)
     if(!isdefined(self.menuSetting))
         self.menuSetting = [];
         
-    MenuDefaults = strTok("0;1;1;1;0;1;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;1",";");
+    MenuDefaults = strTok("0;1;1;1;0;1;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;1;0",";");
     
     if(!IsDefined(Val) || IsDefined(Val) && Val == 0)
     {
@@ -83,6 +86,21 @@ MenuLoad(Val)
     
     self.menuSetting["MenuX"] = int(MenuDefaults[18]);
     self.menuSetting["MenuY"] = int(MenuDefaults[19]);
+    // Theme
+    self.menu["Theme"] = [];
+    self.menu["Theme"]["Default"] = true;
+    self.menu["Theme"]["Flex"] = false;
+
+    // Theme value was added after the original save format.
+    // Missing value = Default.
+    if(MenuDefaults.size > 22)
+    {
+        if(MenuDefaults[22] == "1")
+        {
+            self.menu["Theme"]["Default"] = false;
+            self.menu["Theme"]["Flex"] = true;
+        }
+    }
     
     if(IsDefined(Val) && Val == 1 || IsDefined(Val) && Val == 0)
     {
@@ -129,13 +147,19 @@ MoveMenu()
     
     MenuVisTemp = [];
     
-    MenuVisTemp["BG"] = self createRectangle("LEFT", "TOP", 0, 90, 170, int(7*15) + 45, (0,0,0), "white", 0, .6, true);
-    MenuVisTemp["TITLE"] = self createText("objective", 1.5, "CENTER", "TOP", -340, 95, 0, 1, "Menu Reposition", (1, 1, 1), true);
-    MenuVisTemp["INFO0"] = self createText("objective", 1.2, "CENTER", "TOP", -340, 120, 0, 1, "Movement Controls", (1, 1, 1), true);
-    MenuVisTemp["INFO1"] = self createText("objective", 1, "CENTER", "TOP", -340, 140, 0, 1, "UP - [{+attack}] DOWN - [{+speed_throw}]", (1, 1, 1), true);
-    MenuVisTemp["INFO2"] = self createText("objective", 1, "CENTER", "TOP", -340, 160, 0, 1, "LEFT - [{+smoke}] RIGHT - [{+frag}]", (1, 1, 1), true);
-    MenuVisTemp["INFO3"] = self createText("objective", 1, "CENTER", "TOP", -340, 180, 0, 1, "CONFIRM PLACEMENT - [{+activate}]", (1, 1, 1), true);
-    MenuVisTemp["INFO4"] = self createText("objective", 1, "CENTER", "TOP", -340, 200, 0, 1, "DISCARD CHANGES - [{+melee}]", (1, 1, 1), true);
+    MenuVisTemp["BG"] = self createRectangle("TOPLEFT","TOP",-425,90,170,int(8 * 15) + 45,(0, 0, 0),"white",0,.6,true);
+
+        MenuVisTemp["TITLE"] = self createText("default",1.5,"CENTER","TOP",-340,105,0,1,"Menu Reposition",(1, 1, 1),true);
+
+        MenuVisTemp["INFO0"] = self createText("default",1.2,"CENTER","CENTER",-340,-75,0,1,"Movement Controls",(1, 1, 1),true);
+
+        MenuVisTemp["INFO1"] = self createText("default",1,"CENTER","CENTER",-340,-40,0,1,"UP - [{+attack}] DOWN - [{+speed_throw}]",(1, 1, 1),true);
+
+        MenuVisTemp["INFO2"] = self createText("default",1,"CENTER","CENTER",-340,-30,0,1,"LEFT - [{+actionslot 4}] RIGHT - [{+actionslot 3}]",(1, 1, 1),true);
+
+        MenuVisTemp["INFO3"] = self createText("default",1,"CENTER","CENTER",-340,0,0,1,"CONFIRM PLACEMENT - [{+activate}]",(1, 1, 1),true);
+
+        MenuVisTemp["INFO4"] = self createText("default",1,"CENTER","CENTER",-340,-10,0,1,"DISCARD CHANGES - [{+melee}]",(1, 1, 1),true);
     
     X = self.menuSetting["MenuX"];
     Y = self.menuSetting["MenuY"];

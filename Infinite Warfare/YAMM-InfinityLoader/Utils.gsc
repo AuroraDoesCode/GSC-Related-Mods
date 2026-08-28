@@ -105,3 +105,10 @@ iPrintRemove(arr, elem)
             newArr[newArr.size] = arr[i];
     return newArr;
 }
+
+
+setTextWrapper(text) overrides setText
+{
+    //you can do overflow checking in here
+    self setSafeText(text);
+}

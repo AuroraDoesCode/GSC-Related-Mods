@@ -23,7 +23,7 @@ Godmode()
 
 ThirdPerson()
 {
-    self.thirdPerson = isDefined(self.thirdPerson) ? undefined : true;
+    self.thirdPerson = !bool(self.thirdPerson);
     if(self.thirdPerson)
     {
         setDvar("camera_thirdPerson", 1);

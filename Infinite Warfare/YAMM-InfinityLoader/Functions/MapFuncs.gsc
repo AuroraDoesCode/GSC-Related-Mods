@@ -197,3 +197,135 @@ clear_outline_for_all_players(player)
         }
     }
 }
+
+ShaolinEESteps(step)
+{
+	switch(step)
+	{
+		case 1: 
+            token = getent("peepshow_token","targetname");
+            level.peepshow_token_found = 1;
+            enterStall = scripts\engine\utility::getstruct("enter_stall","script_noteworthy");
+            enterStall.script_noteworthy = "enter_stall_allowed";
+            self thread scripts\cp\_vo::try_to_play_vo("pap_quest_collect_coin","disco_comment_vo","low",10,0,2,0,40);
+            token delete();
+            level scripts\cp\_utility::set_quest_icon(10);
+        break;
+		case 2:
+        level.peepshow_reel_found = 1;
+         scripts\cp\_interaction::add_to_current_interaction_list(level.booth_projector_struct);
+          level.interactions["add_reel"].disable_guided_interactions = undefined;
+           level scripts\cp\_utility::set_quest_icon(12);
+            scripts\cp\_interaction::remove_from_current_interaction_list("pickup_reel");
+        break;
+		case 3:
+         level.peepshow_flyer_found = 1;
+          self thread scripts\cp\_vo::try_to_play_vo("pap_quest_collect_ticket","disco_comment_vo","low",10,0,2,0,40);
+           level scripts\cp\_utility::set_quest_icon(11);
+           level.peepshow_entrances = scripts\engine\utility::getstructarray("enter_peepshow","script_noteworthy");
+           foreach(var_03 in level.peepshow_entrances)
+           {
+             var_03.script_noteworthy = "enter_peepshow_allowed";
+             }
+        break;
+		case 4: 
+        scripts\common\utility::flag_set("skq_p2t1_1");
+        level scripts\cp\_utility::set_quest_icon(14);
+         scripts\common\utility::flag_set("skq_p2t1_2");
+          level notify("cage_win");
+        break;
+		case 5: 
+        var_05 = scripts\engine\utility::getstruct("locker_rortator_mpq","targetname");
+         var_01 = getent("subway_locker_door","targetname");
+          if(isdefined(var_05))
+          {
+            var_06 = scripts\engine\utility::spawn_tag_origin(var_05.origin,var_05.angles);
+            var_01 linkto(var_06);
+            playsoundatpos(var_06.origin,"disco_locker_open");
+            var_06 rotateyaw(120,2,1,0.5);
+            wait(2);
+            var_06 delete();
+            }
+            else
+            {
+                var_01 delete();
+            }
+            scripts\common\utility::flag_set("skq_p2t1_3");
+            level notify("active_word_done");
+            var_01 = getent("graffiti_quest_clip","targetname");
+            var_02 = getent("graffiti_quest_fail_clip","targetname");
+            var_03 = getent("graffiti_quest_clip_alt","targetname");
+            thread rk_symbol_handler("rk_symbol_punk_streets","skq_p2t1_4");
+            scripts\cp\_utility::deactivatebrushmodel(var_01,1);
+            scripts\cp\_utility::deactivatebrushmodel(var_02,1);
+            scripts\cp\_utility::deactivatebrushmodel(var_03,1);
+        break;
+		case 6:
+            var_02 = scripts\engine\utility::getstructarray("phonebooth","script_noteworthy");
+            level.phone_puzzle_phone = var_02[var_02.size - 1];
+            thread payphone_ringing(level.phone_puzzle_phone);
+            scripts\engine\utility::flag_set("skq_p2t2_1");
+            scripts\engine\utility::flag_set("skq_p2t2_2");
+            scripts\engine\utility::flag_set("skq_p2t2_3");
+        break;
+		case 7:
+            var_02 = getentarray("mpq_poster_model","targetname");
+            foreach(var_04 in var_02)
+            {
+                var_04 notify("correct_poster_got");
+            }
+            self.number delete();
+            self delete();
+            level scripts\cp\utility::set_quest_icon(16);
+            scripts\engine\utility::flag_set("correct_poster_got");
+            level.phone_puzzle_phone = undefined;
+            scripts\engine\utility::flag_set("skq_p2t2_4");
+            scripts\engine\utility::flag_set("skq_p2t2_5");
+            foreach(var_11 in level.rooftopcypherglyphs)
+            {
+                if(isdefined(var_11))
+                {
+                    var_11 delete();
+                }
+            }
+            level.rooftopcypherglyphs = undefined;
+            thread rk_symbol_handler("rk_symbol_punk_rooftops","skq_p2t2_6");
+        break;
+	}
+	self iPrintLnAlt("Completed Step "+step);
+}
+
+rk_symbol_handler(param_00,param_01)
+{
+	level endon("game_ended");
+	var_02 = scripts\common\utility::getstruct(param_00,"targetname");
+	var_03 = scripts\common\utility::spawn_tag_origin(var_02.origin,var_02.angles);
+	var_03 makeusable();
+	var_03 setusefov(45);
+	var_03 setuserange(96);
+	var_04 = scripts\common\utility::drop_to_ground(var_02.origin,30,-100);
+	var_04 = var_04 + (0,0,1);
+	var_05 = spawnfx(level._effect["test_glyph_mpq"],var_04,anglestoforward(var_02.angles),anglestoup(var_02.angles));
+	triggerfx(var_05);
+	foreach(player in level.players)
+	{
+		player playsoundtoplayer("quest_stage_completed_gong_lr",player);
+	}
+
+	var_03 setusefov(180);
+	var_03 waittill("trigger");
+	var_03 delete();
+	var_05 delete();
+	scripts\common\utility::flag_set(param_01);
+}
+
+payphone_ringing(param_00)
+{
+	level endon("game_ended");
+	var_01 = spawn("script_model",param_00.origin + (0,0,50));
+	var_01 setmodel("tag_origin");
+	var_01 playloopsound("payphone_npc_ring");
+	param_00 waittill("phone_answered",var_02);
+	level.player_answered_phone = var_02;
+	var_01 delete();
+}
