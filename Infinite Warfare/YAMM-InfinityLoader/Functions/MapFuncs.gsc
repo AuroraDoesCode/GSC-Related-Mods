@@ -571,6 +571,7 @@ AttackOpenSesame()
 	scripts\common\utility::flag_set("found_missing_handle");
 	self playlocalsound("part_pickup");
 	var_00.model delete();
+	self givetrapparticon("lever");
 	scripts\common\utility::flag_set("placed_missing_handle");
 	wait(1);
 	level notify("found_power");
@@ -680,9 +681,9 @@ usebrokengenerator()
 
 spawn_film_reel_hints()
 {
-	var_00 = spawn("script_model",(4070,-4190,16));
+	filmreel = spawn("script_model",self.origin);
 	wait(0.1);
-	var_00 setmodel("cp_town_film_reel_case");
+	filmreel setmodel("cp_town_film_reel_case");
 }
 taketrapparticon(trapname)
 {
@@ -851,4 +852,78 @@ clear_existing_enemies()
 	}
 
 	scripts\common\utility::func_136F7();
+}
+StartBossFight()
+{
+	self thread cleardoorsanddebris();
+	self thread TurnOnPower();
+	level notify("start_direct_boss_fight");
+	scripts\common\utility::flag_set("boss_fight_active");
+	if(isdefined(level.setup_direct_boss_fight_func))
+	{
+		level thread [[ level.setup_direct_boss_fight_func ]]();
+	}
+	wait 1;
+	if(isdefined(level.start_direct_boss_fight_func))
+	{
+		level thread [[ level.start_direct_boss_fight_func ]]();
+	}
+}
+placeElvirasBook()
+{
+	scripts\common\utility::flag_set("spellbook_placed");
+	self playlocalsound("zmb_coin_sounvenir_place");
+	playfx(level._effect["vfx_cp_town_book_place"],level.elvira_spellbook.origin + (0,0,10),anglestoforward(level.elvira_spellbook.angles),anglestoup(level.elvira_spellbook.angles));
+	wait(0.45);
+	level.elvira_spellbook show();
+	playfx(level._effect["vfx_cp_town_book_idle"],level.elvira_spellbook.origin + (0,0,10),anglestoforward(level.elvira_spellbook.angles),anglestoup(level.elvira_spellbook.angles));
+}
+FillVial()
+{
+
+	scripts\cp\_utility::set_quest_icon(23);
+	scripts\common\utility::func_6E2A("vial_filled");
+	setomnvar("zom_general_fill_percent_2",0);
+	scripts\common\utility::flag_set("vial_filled");
+	scripts\cp\_utility::set_quest_icon(20);
+}
+summonElvira()
+{
+	level.elvira_ai = undefined;
+	if(!isdefined(level.elvira_spawn_struct))
+	{
+		elviraModel = spawnstruct();
+		elviraModel.origin = self.origin;
+		elviraModel.angles = (0,180,0);
+	}
+	else
+	{
+		elviraModel = level.elvira_spawn_struct;
+	}
+
+	for(;;)
+	{
+		level.elvira_ai = scripts\cp\zombies\zombies_spawning::func_33B1("elvira",elviraModel.origin,elviraModel.angles,"allies",undefined,"iw7_erad_zm");
+		if(!isdefined(level.elvira_ai))
+		{
+			wait(0.2);
+			continue;
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	level.elvira_ai.var_1491.var_E5DE = 5;
+	level.elvira_ai.health = 100000;
+	level.elvira_ai.maxhealth = 100000;
+	level.elvira_ai setcandamage(0);
+	level.elvira_ai.allowpain = 0;
+	level.elvira_ai.ignoreme = 1;
+	level.elvira_ai.var_3842 = 1;
+	level.elvira_ai.var_FFEF = 1;
+	playfx(level._effect["elvira_stand_smoke"],level.elvira_ai.origin);
+	playsoundatpos(level.elvira_ai.origin,"town_elvira_appear");
+	level scripts\cp\_utility::set_completed_quest_mark(2);
 }

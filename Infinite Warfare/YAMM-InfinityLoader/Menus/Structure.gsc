@@ -110,6 +110,7 @@ menuOptions()
                 self addOpt("Trigger MW2 Song", ::PlayAudioToClients, "mus_pa_mw2_80s_cover");
                 self addOpt("Activate Ghosts N Skulls", ::CompleteGnS);
                 self addOpt("Play Knight Rider", ::PlayAudioToClients, "mus_pa_sp_knightrider");
+                self addOpt("Start Boss Fight", ::StartBossFight);
             break;
         case "SLQuests":
             self addMenu("SLQuests", "Quest Options");
@@ -122,25 +123,32 @@ menuOptions()
             self addMenu("Rave in the Redwoods", "Rave in the Redwoods");
             self addOpt("Play Puppet Strings", ::PlayAudioToClients, "mus_pa_rave_hidden_track");
                 self addOpt("Activate Ghosts N Skulls", ::CompleteGnS);
+                self addOpt("Start Boss Fight", ::StartBossFight);
             break;
         case "Shaolin Shuffle":
             self addMenu("Shaolin Shuffle", "Shaolin Shuffle");
                 self addOpt("Play Fat Cats Song", ::PlayAudioToClients, "mus_pa_disco_hidden_track");
                 self addSlider("Complete EE Step", 0,0,20,1, ::ShaolinEESteps);
                 self addOpt("Activate Ghosts N Skulls", ::CompleteGnS);
+                self addOpt("Start Boss Fight", ::StartBossFight);
             break;
 
         case "Radioactive Thing":
-            self addMenu("Radioactive Thing", "Attack of the Radioactive Thing");
+            self addMenu("Radioactive Thing", "Radioactive Thing");
                 self addOpt("Play Brackyura boogie", ::PlayAudioToClients, "mus_pa_town_hidden_track");
 				self addSlider("Complete EE Step", 0,0,12,1,::AttackEESteps);
+                self addOpt("Give Elvira Her Book", ::placeElvirasBook);
+                self addOpt("Summon Elvira", ::summonElvira);
+                self addOpt("Fill Crog Vial", ::FillVial);
 				self addOpt("Spawn Chemical Recording", ::spawn_film_reel_hints);
                 self addOpt("Activate Ghosts N Skulls", ::CompleteGnS);
+                self addOpt("Start Boss Fight", ::StartBossFight);
             break;
         case "Beast from Beyond":
             self addMenu("Beast from Beyond", "Beast from Beyond");
                 self addOpt("Play Scattered Lies", ::PlayAudioToClients, "mus_pa_final_hidden_track");
                 self addOpt("Activate Ghosts N Skulls", ::CompleteGnS);
+                self addOpt("Start Boss Fight", ::StartBossFight);
             break;
         case "AllClients":
             self addMenu("AllClients", "All Client Options");
@@ -174,6 +182,7 @@ menuOptions()
             self addMenu("Host Debug", "Host Debug Settings");
             self addOpt("Fast Restart", ::FastRestartGame);
             self addOpt("Print Key Count", ::GetKeyCount);
+            self addOpt("Test Keys", ::KeyGiving);
             self addOpt("End The Game", ::EndGameHost);
             self addSlider("Send Client Message",1,1,5,1,::ClientMessages);
             self addOpt("Print Coords", ::PrintCoords);

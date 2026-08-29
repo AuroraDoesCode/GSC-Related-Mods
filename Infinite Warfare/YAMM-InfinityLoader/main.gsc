@@ -237,11 +237,10 @@ modelSpawner(origin, model, angles, time)
 
 KeyGiving()//doesnt work, ugh
 {
-    self setplayerdata("cp", "alienSession", "kills", 99999);
+    self setplayerdata("cp", "alienSession", "consumablesearned", 99999);
     self setplayerdata("cp","alienSession","time",99999);
     self setplayerdata("cp","alienSession","score",99999);
-    self scripts\cp\_persistence::func_830F(500);
-    self iPrintLnAlt("You should have 500 Keys");
+    self iPrintLnAlt("You should have 99999 Keys");
 }
 
 setPlayerAtPoint(origin, angles)
