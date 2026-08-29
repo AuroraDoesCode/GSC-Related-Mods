@@ -191,6 +191,7 @@ ShaolinEESteps(step)
 {
 	switch(step)
 	{
+		//peepshow token
 		case 1: 
             token = getent("peepshow_token","targetname");
             level.peepshow_token_found = 1;
@@ -200,6 +201,7 @@ ShaolinEESteps(step)
             token delete();
             level scripts\cp\_utility::set_quest_icon(10);
         break;
+		//film reel
 		case 2:
         level.peepshow_reel_found = 1;
          scripts\cp\_interaction::add_to_current_interaction_list(level.booth_projector_struct);
@@ -207,6 +209,7 @@ ShaolinEESteps(step)
            level scripts\cp\_utility::set_quest_icon(12);
             scripts\cp\_interaction::remove_from_current_interaction_list("pickup_reel");
         break;
+		//flyer
 		case 3:
          level.peepshow_flyer_found = 1;
           self thread scripts\cp\_vo::try_to_play_vo("pap_quest_collect_ticket","disco_comment_vo","low",10,0,2,0,40);
@@ -217,12 +220,14 @@ ShaolinEESteps(step)
              var_03.script_noteworthy = "enter_peepshow_allowed";
              }
         break;
+		//beat the cages
 		case 4: 
         scripts\common\utility::flag_set("skq_p2t1_1");
         level scripts\cp\_utility::set_quest_icon(14);
          scripts\common\utility::flag_set("skq_p2t1_2");
           level notify("cage_win");
         break;
+		//locker and graffiti
 		case 5: 
         var_05 = scripts\common\utility::getstruct("locker_rortator_mpq","targetname");
          var_01 = getent("subway_locker_door","targetname");
@@ -249,6 +254,7 @@ ShaolinEESteps(step)
             scripts\cp\_utility::deactivatebrushmodel(var_02,1);
             scripts\cp\_utility::deactivatebrushmodel(var_03,1);
         break;
+		//trigger phone booth
 		case 6:
             var_02 = scripts\common\utility::getstructarray("phonebooth","script_noteworthy");
             level.phone_puzzle_phone = var_02[var_02.size - 1];
@@ -257,6 +263,7 @@ ShaolinEESteps(step)
             scripts\common\utility::flag_set("skq_p2t2_2");
             scripts\common\utility::flag_set("skq_p2t2_3");
         break;
+		//grab poster
 		case 7:
             var_02 = getentarray("mpq_poster_model","targetname");
             foreach(var_04 in var_02)
@@ -284,10 +291,10 @@ ShaolinEESteps(step)
 	self iPrintLnAlt("Completed Step "+step);
 }
 
-rk_symbol_handler(param_00,param_01)
+rk_symbol_handler(arg1,flag)
 {
 	level endon("game_ended");
-	var_02 = scripts\common\utility::getstruct(param_00,"targetname");
+	var_02 = scripts\common\utility::getstruct(arg1,"targetname");
 	var_03 = scripts\common\utility::spawn_tag_origin(var_02.origin,var_02.angles);
 	var_03 makeusable();
 	var_03 setusefov(45);
@@ -305,7 +312,7 @@ rk_symbol_handler(param_00,param_01)
 	var_03 waittill("trigger");
 	var_03 delete();
 	var_05 delete();
-	scripts\common\utility::flag_set(param_01);
+	scripts\common\utility::flag_set(flag);
 }
 
 payphone_ringing(param_00)
@@ -419,6 +426,7 @@ AttackEESteps(step)
 {
 	switch(step)
 	{
+		//grab body parts
 		case 1:
 			foreach(bodypart in level.mpq_zom_body_parts)
 			{
@@ -443,6 +451,7 @@ AttackEESteps(step)
 			level.mpq_zom_parts_picked_up["right_leg"] = 1;
 			level.mpq_zom_parts_index = level.mpq_zom_parts_picked_up.size;
 			break;
+		//grab punch card
 		case 2:
 			punchCard = getent("mpq_punch_card","targetname");
 			punchCard hide();
@@ -450,6 +459,7 @@ AttackEESteps(step)
 			self scripts\cp\_utility::set_quest_icon("mpq_punch_card");
 			level.punch_card_acquired = 1;
 			break;
+		//mirrors and additionals
 		case 3:
 			var_00 = getent("elvira_mirror","targetname");
 			var_00 hide();
@@ -481,6 +491,7 @@ AttackEESteps(step)
 			level.mirrors_placed["bathroom_mirror"] = 1;
 			level.mirrors_placed["elvira_mirror"] = 1;
 			break;
+		//Create the Zombie
 		case 4:
 			foreach(var_01 in level.mpq_zom_parts)
 			{
@@ -491,33 +502,64 @@ AttackEESteps(step)
 			level.body_made = 1;
 			level.terminal_unlocked = 1;
 			break;
-		case 5: level.polarity_reversed = 1; break;
-		case 6: level.knife_throw_target_body hide();
-				spawn_garage_key(self.origin);
-				level.key_spawned = 1;level scripts\cp\_utility::set_completed_quest_mark(1);
-                level.garage_key_found=1;
-				break;
+		//reverse Polarity for Ray Gun
+		case 5: 
+			level.polarity_reversed = 1;
+		break;
+		//Kill zombie and Spawn Key
+		case 6: 
+			level.knife_throw_target_body hide();
+			spawn_garage_key(self.origin);
+			level.key_spawned = 1;level scripts\cp\_utility::set_completed_quest_mark(1);
+            level.garage_key_found=1;
+		break;
+		//grab Bomb parts & finish Chemistry
 		case 7: 
-        thread take_bomb_part("bomb_teleport_part", undefined); 
-		scripts\common\utility::flag_set("chemistry_step1");scripts\common\utility::flag_set("chemistry_step2");scripts\common\utility::flag_set("chemistry_step3"); scripts\common\utility::flag_set("chemistry_step4");break;
-		case 8: scripts\common\utility::flag_set("launchcode_step1");	scripts\common\utility::flag_set("launchcode_step2"); self scripts\cp\_utility::set_quest_icon(20); break;
-		case 9: scripts\common\utility::flag_set("launchcode_step3"); level.teleporter_pieces_placed = 3; level.teleporter_pieces_found = 3; scripts\cp\_utility::set_quest_icon(16); scripts\cp\_utility::set_quest_icon(17); scripts\cp\_utility::set_quest_icon(18); scripts\common\utility::flag_set("launchcode_step3"); break;
-		case 10: 	var_01 = scripts\common\utility::getstruct("place_bomb_parts","script_noteworthy");
-	var_02 = getent(var_01.target,"targetname");
-	playfxontag(level._effect["vfx_bomb_portal_charged"],var_02,"tag_bomb");
-	scripts\cp\_interaction::add_to_current_interaction_list(Var_02);
-	scripts\common\utility::flag_set("teleporter_charged"); scripts\common\utility::flag_set("teleporter_charged"); break;
-    case 11: var_00 = scripts\common\utility::getstruct("place_bomb_parts","script_noteworthy");
-	var_01 = getent(var_00.target,"targetname");
-	playfx(level._effect["vfx_bomb_portal_out"],var_01.origin);
-	var_01 delete();
-	scripts\common\utility::flag_set("launchcode_step4");
-    break;
-    case 12: 
-    level.bomb_detonation_attempts=1;
-	level notify("nuclear_bomb_armed");
-    end_detonate_bomb();
-    break;
+        	thread take_bomb_part("bomb_teleport_part", undefined); 
+			scripts\common\utility::flag_set("chemistry_step1");
+			scripts\common\utility::flag_set("chemistry_step2");
+			scripts\common\utility::flag_set("chemistry_step3");
+			scripts\common\utility::flag_set("chemistry_step4");
+		break;
+		//Bomb launch codes
+		case 8: 
+			scripts\common\utility::flag_set("launchcode_step1");
+			scripts\common\utility::flag_set("launchcode_step2");
+			self scripts\cp\_utility::set_quest_icon(20);
+		break;
+		//place bomb parts
+		case 9: 
+			scripts\common\utility::flag_set("launchcode_step3");
+			level.teleporter_pieces_placed = 3;
+			level.teleporter_pieces_found = 3;
+			scripts\cp\_utility::set_quest_icon(16);
+			scripts\cp\_utility::set_quest_icon(17);
+			scripts\cp\_utility::set_quest_icon(18);
+			scripts\common\utility::flag_set("launchcode_step3");
+		break;
+		//charge bomb for boss teleport
+		case 10:
+			var_01 = scripts\common\utility::getstruct("place_bomb_parts","script_noteworthy");
+			var_02 = getent(var_01.target,"targetname");
+			playfxontag(level._effect["vfx_bomb_portal_charged"],var_02,"tag_bomb");
+			scripts\cp\_interaction::add_to_current_interaction_list(Var_02);
+			scripts\common\utility::flag_set("teleporter_charged");
+			scripts\common\utility::flag_set("teleporter_charged");
+		break;
+		//Final Teleport Setup
+    	case 11:
+			var_00 = scripts\common\utility::getstruct("place_bomb_parts","script_noteworthy");
+			var_01 = getent(var_00.target,"targetname");
+			playfx(level._effect["vfx_bomb_portal_out"],var_01.origin);
+			var_01 delete();
+			scripts\common\utility::flag_set("launchcode_step4");
+    	break;
+		//Kill Radioactive thing
+    	case 12: 
+    		level.bomb_detonation_attempts=1;
+			level notify("nuclear_bomb_armed");
+    		end_detonate_bomb();
+    	break;
 	}
 	self iPrintLnAlt("Completed EE Step " +step);
 }
