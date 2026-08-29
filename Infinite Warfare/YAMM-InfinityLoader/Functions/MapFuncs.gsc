@@ -869,6 +869,17 @@ StartBossFight()
 		level thread [[ level.start_direct_boss_fight_func ]]();
 	}
 }
+
+PickupElvirasBook()//bookItem, self
+{
+	scripts\cp\_interaction::remove_from_current_interaction_list(level.elvira_spellbook);
+	scripts\common\utility::flag_set("spellbook_found");
+	var_02 = getent(level.elvira_spellbook.target,"targetname");
+	self playlocalsound("part_pickup");
+	playfx(level._effect["generic_pickup"],var_02.origin);
+	var_02 delete();
+	scripts\cp\_utility::set_quest_icon(19);
+}
 placeElvirasBook()
 {
 	scripts\common\utility::flag_set("spellbook_placed");
@@ -878,6 +889,24 @@ placeElvirasBook()
 	level.elvira_spellbook show();
 	playfx(level._effect["vfx_cp_town_book_idle"],level.elvira_spellbook.origin + (0,0,10),anglestoforward(level.elvira_spellbook.angles),anglestoup(level.elvira_spellbook.angles));
 }
+TakePages()
+{
+	page1 = getent("spellbook_page1", "targetname");
+	page2 = getent("spellbook_page2", "targetname");
+	self takespellbookpage(page1, self);
+	self takespellbookpage(page2, self);
+}
+takespellbookpage(param_00,param_01)
+{
+	scripts\cp\_interaction::remove_from_current_interaction_list(param_00);
+	scripts\common\utility::flag_set("spellbook_page1_found");
+	var_02 = getent(param_00.target,"targetname");
+	param_01 playlocalsound("part_pickup");
+	playfx(level._effect["generic_pickup"],var_02.origin);
+	var_02 delete();
+	scripts\cp\_utility::set_quest_icon(21);
+	scripts\cp\_utility::set_quest_icon(22);
+}
 FillVial()
 {
 
@@ -885,7 +914,6 @@ FillVial()
 	scripts\common\utility::func_6E2A("vial_filled");
 	setomnvar("zom_general_fill_percent_2",0);
 	scripts\common\utility::flag_set("vial_filled");
-	scripts\cp\_utility::set_quest_icon(20);
 }
 summonElvira()
 {

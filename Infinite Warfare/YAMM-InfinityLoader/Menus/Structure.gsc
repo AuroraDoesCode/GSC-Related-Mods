@@ -75,8 +75,8 @@ menuOptions()
                 break;
         case "Powerup Menu":
             self addMenu("Powerup Menu", "Powerup Menu");
-                for(t = 0; t < level._PowerupDropLoot.size; t++)
-                self addOpt(constructString(replaceChar(level._PowerupDropLoot[t], "_", " ")), ::spawn_powerup, level._PowerupDropLoot[t]);
+                for(t = 0; t < level._PowerupDropNames.size; t++)
+                self addOpt(level._PowerupDropNames[t], ::spawn_powerup, level._PowerupDropLoot[t]);
             break;
         case "Zombies Options":
             self addMenu("Zombies Options", "Zombies Options");
@@ -137,6 +137,8 @@ menuOptions()
             self addMenu("Radioactive Thing", "Radioactive Thing");
                 self addOpt("Play Brackyura boogie", ::PlayAudioToClients, "mus_pa_town_hidden_track");
 				self addSlider("Complete EE Step", 0,0,12,1,::AttackEESteps);
+                self addOpt("Pickup Elviras Book", ::PickupElvirasBook);
+                self addOpt("Pickup Elviras Pages", ::TakePages);
                 self addOpt("Give Elvira Her Book", ::placeElvirasBook);
                 self addOpt("Summon Elvira", ::summonElvira);
                 self addOpt("Fill Crog Vial", ::FillVial);

@@ -146,7 +146,8 @@ InitializeMenu()
     level.papCamoSS         = ["+camo211","+camo212"];
     level.papCamoRT         = ["+camo92","+camo93"];
     level.papCamoBB         = ["+camo32","+camo34"];
-    level._PowerupDropLoot = GetArrayKeys(level.var_163F);//level.
+    level._PowerupDropLoot  = ["kill_50","ammo_max","instakill_30","cash_2","board_windows", "upgrade_weapons", "infinite_20", "grenade_30","fire_30"];
+    level._PowerupDropNames = ["Nuke", "Max Ammo", "Instakill", "Double Points", "Carpenter", "Weapon Upgrade", "Infinite Ammo", "Infinite Grenades", "Fire Sale"];
     level.pickupLoot        = ["power_bioSpike","power_c4","power_clusterGrenade","power_concussionGrenade","power_frag","power_gasGrenade","power_semtex","power_splashGrenade"];
     level.pickupLootName    = ["Bio Spikes","C4","Cluster Grenades","Concussion Grenades","Frag Grenades","Gas Grenades","Semtex Grenades", "Splash Grenades"];
     level.pickupPowers      = ["power_speedBoost","power_teleport","power_transponder","power_cloak","power_barrier","power_mortarMount"];
