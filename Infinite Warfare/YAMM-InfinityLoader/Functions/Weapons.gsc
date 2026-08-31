@@ -72,7 +72,6 @@ GiveWeaponToPlayer(weapon, player)
         player setWeaponAmmoClip(player getCurrentWeapon(), 999, "right");
     }
 }
-
 build_custom_weapon(weapon, camo, extra_attachments) 
 {
     weapon_name = scripts\cp\_utility::func_80D8(weapon);

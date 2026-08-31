@@ -73,7 +73,7 @@ ToggleAmmo() {
         self setWeaponAmmoClip(self getCurrentWeapon(), 999);
         self setWeaponAmmoClip(self getCurrentWeapon(), 999, "left");
         self setWeaponAmmoClip(self getCurrentWeapon(), 999, "right");
-        self scripts\cp\powers\coop_powers::func_D71A(2, "primary", 2);
+        self scripts\cp\powers\coop_powers::func_D71A(2, "primary", 2);//breaks transponders
         self scripts\cp\powers\coop_powers::func_D71A(2, "secondary", 2);
         wait .2;
     }

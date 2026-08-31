@@ -138,12 +138,6 @@ UnlockTalismans(player)
     player iPrintlnAlt("All Talismans ^2Unlocked");
 }
 
-GetKeyCount()
-{
-    keyCount = self GetPlayerData("common","sharedProgression", "currency");
-    if(!isDefined(keyCount)){ self iPrintLnAlt("Wrong Player Data"); return;}
-    self iPrintLnAlt("You Currently Have: "+keyCount+" Keys");
-}
 SoulKeyUnlock(player)
 {
      player getplayerdata("cp","haveSoulKeys","soul_key_1");

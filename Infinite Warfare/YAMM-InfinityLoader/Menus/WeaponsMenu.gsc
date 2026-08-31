@@ -17,6 +17,7 @@ CreateWeaponsMenuOptions()
             self addMenu("Weapon Manipulation", "Weapon Manipulation");
                 self addOpt("Weapon Selection", ::newMenu, "Weapon Selection");
                 self addOpt("Pillaged Loot", ::newMenu, "Pillaged Loot");
+                self addOpt("Powerup Loot", ::newMenu, "Powerup Loot");
                 self addOpt("Fill Fate And Fortune", ::FillFAF);
             break;
         case "Pillaged Loot":
@@ -124,5 +125,10 @@ CreateWeaponsMenuOptions()
                     self addOpt(level.OtherNames[i], ::GiveWeaponToPlayer, level.otherWeaps[i], self);
                 }
             break;
+        case "Powerup Loot":
+            self addMenu("Powerup Loot", "Powerup Loot");
+                for(p=0;p<level.pickupPowers.size;p++)//transponder doesnt like inf ammo
+                    self addOpt(level.pickupPowerNames[p], ::givepillagedloot, level.pickupPowers[p]);
+        break;
     }
 }

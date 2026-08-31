@@ -93,13 +93,17 @@ MenuLoad(Val)
 
     // Theme value was added after the original save format.
     // Missing value = Default.
-    if(MenuDefaults.size > 22)
+    if(MenuDefaults.size >= 22)
     {
         if(MenuDefaults[22] == "1")
         {
             self.menu["Theme"]["Default"] = false;
             self.menu["Theme"]["Flex"] = true;
         }
+    }
+    else if(MenuDefaults.size == 21)
+    {
+        self.menu["Theme"]["Default"] = true;
     }
     
     if(IsDefined(Val) && Val == 1 || IsDefined(Val) && Val == 0)

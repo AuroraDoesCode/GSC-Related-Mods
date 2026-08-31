@@ -25,8 +25,8 @@ PlayAudioToClients(audioFile)
 
 CompleteGnS()
 {
+	foreach(player in level.players) player playlocalsound("ghosts_quest_step_notify");
     self lib_0D59::use_activate_gns_machine("activate_gns_machine");
-    scripts\cp\maps\cp_zmb\cp_zmb_ghost_wave::func_C127(6);//notifyactivationprogress
 }
 
 
@@ -431,7 +431,7 @@ AttackEESteps(step)
 			foreach(bodypart in level.mpq_zom_body_parts)
 			{
 				set_quest_omnvar_by_targetname(bodypart);
-				self scripts\cp\_utility::set_quest_icon(bodypart);
+				self scripts\cp\_utility::set_quest_icon(bodypart);//set quest icon flags
 				bodypart hide();
 				wait(0.1);
 			}
@@ -442,7 +442,7 @@ AttackEESteps(step)
 			{
 				var_03 hide();
 			}
-
+			for(i=1;i<7;i++) self scripts\cp\_utility::set_quest_icon(i);//set quest icon flags
 			level.mpq_zom_parts_picked_up["head"] = 1;
 			level.mpq_zom_parts_picked_up["torso"] = 1;
 			level.mpq_zom_parts_picked_up["left_arm"] = 1;
@@ -456,7 +456,7 @@ AttackEESteps(step)
 			punchCard = getent("mpq_punch_card","targetname");
 			punchCard hide();
 			set_quest_omnvar_by_targetname("mpq_punch_card");
-			self scripts\cp\_utility::set_quest_icon("mpq_punch_card");
+			self scripts\cp\_utility::set_quest_icon("mpq_punch_card");//set quest icon flags
 			level.punch_card_acquired = 1;
 			break;
 		//mirrors and additionals
@@ -465,19 +465,19 @@ AttackEESteps(step)
 			var_00 hide();
 			level.mirrors_picked_up["elvira_mirror"] = 1;
 			set_quest_omnvar_by_targetname(var_00);
-			self scripts\cp\_utility::set_quest_icon(var_00);
+			self scripts\cp\_utility::set_quest_icon(var_00);//set quest icon flags
 			var_00 = getent("car_mirror","targetname");
 			var_00 hide();
 			var_00 = getent("car_mirror_ground","targetname");
 			var_00 hide();
 			level.mirrors_picked_up["car_mirror_ground"] = 1;
 			set_quest_omnvar_by_targetname(var_00);
-			self scripts\cp\_utility::set_quest_icon(var_00);
+			self scripts\cp\_utility::set_quest_icon(var_00);//set quest icon flags
 			var_00 = getent("bathroom_mirror_piece","targetname");
 			var_00 hide();
 			level.mirrors_picked_up["bathroom_mirror_piece"] = 1;
 			set_quest_omnvar_by_targetname(var_00);
-			self scripts\cp\_utility::set_quest_icon(var_00);
+			self scripts\cp\_utility::set_quest_icon(var_00);//set quest icon flags
 			var_01 = scripts\common\utility::getstructarray("mirror_placement","script_noteworthy");
 			foreach(var_03 in var_01)
 			{
@@ -490,6 +490,7 @@ AttackEESteps(step)
 			level.mirrors_placed["car_mirror"] = 1;
 			level.mirrors_placed["bathroom_mirror"] = 1;
 			level.mirrors_placed["elvira_mirror"] = 1;
+			for(i=8;i<11;i++) self scripts\cp\_utility::set_quest_icon(i);//set quest icon flags
 			break;
 		//Create the Zombie
 		case 4:
@@ -501,17 +502,22 @@ AttackEESteps(step)
 			level.knife_throw_target_body show();
 			level.body_made = 1;
 			level.terminal_unlocked = 1;
+			self scripts\cp\_utility::set_quest_icon(12);//set quest icon flags
 			break;
 		//reverse Polarity for Ray Gun
 		case 5: 
 			level.polarity_reversed = 1;
+			self scripts\cp\_utility::set_quest_icon(13);//set quest icon flags
 		break;
 		//Kill zombie and Spawn Key
 		case 6: 
 			level.knife_throw_target_body hide();
 			spawn_garage_key(self.origin);
-			level.key_spawned = 1;level scripts\cp\_utility::set_completed_quest_mark(1);
+			level.key_spawned = 1;
+			level scripts\cp\_utility::set_completed_quest_mark(1);//set quest icon flags
             level.garage_key_found=1;
+			self scripts\cp\_utility::set_quest_icon(14);//set quest icon flags
+			self scripts\cp\_utility::set_quest_icon(15);//set quest icon flags
 		break;
 		//grab Bomb parts & finish Chemistry
 		case 7: 
@@ -525,16 +531,17 @@ AttackEESteps(step)
 		case 8: 
 			scripts\common\utility::flag_set("launchcode_step1");
 			scripts\common\utility::flag_set("launchcode_step2");
-			self scripts\cp\_utility::set_quest_icon(20);
+			self scripts\cp\_utility::set_quest_icon(20);//set quest icon flags
 		break;
 		//place bomb parts
 		case 9: 
 			scripts\common\utility::flag_set("launchcode_step3");
 			level.teleporter_pieces_placed = 3;
 			level.teleporter_pieces_found = 3;
-			scripts\cp\_utility::set_quest_icon(16);
-			scripts\cp\_utility::set_quest_icon(17);
-			scripts\cp\_utility::set_quest_icon(18);
+			scripts\cp\_utility::set_quest_icon(16);//set quest icon flags
+			scripts\cp\_utility::set_quest_icon(17);//set quest icon flags
+			scripts\cp\_utility::set_quest_icon(18);//set quest icon flags
+			scripts\cp\_utility::set_quest_icon(19);//set quest icon flags
 			scripts\common\utility::flag_set("launchcode_step3");
 		break;
 		//charge bomb for boss teleport
@@ -559,6 +566,13 @@ AttackEESteps(step)
     		level.bomb_detonation_attempts=1;
 			level notify("nuclear_bomb_armed");
     		end_detonate_bomb();
+			foreach(player in level.players)
+			{
+      			player setplayerdata("cp","haveSoulKeys","soul_key_4",1);
+    			player setplayerdata("cp","haveItems","item_4",1);
+				player iPrintLnAlt("You Just Completed The Attack Easter Egg!");
+				player iPrintLnAlt("You have been Awarded The Soul Key AND Talisman!");
+			}
     	break;
 	}
 	self iPrintLnAlt("Completed EE Step " +step);
@@ -582,11 +596,11 @@ AttackOpenSesame()
 
 usebrokengenerator()
 {
-		player = "missing_handle";
-		scripts\cp\_interaction::remove_from_current_interaction_list(player);
-		player.fixed = 1;
+		handle = "missing_handle";
+		scripts\cp\_interaction::remove_from_current_interaction_list(handle);
+		handle.fixed = 1;
 		self playlocalsound("part_pickup");
-		var_02 = scripts\common\utility::getstruct(player.target,"targetname");
+		var_02 = scripts\common\utility::getstruct(handle.target,"targetname");
 		var_03 = spawn("script_model",var_02.origin);
 		if(isdefined(var_02.angles))
 		{
@@ -596,8 +610,8 @@ usebrokengenerator()
 		var_03 setmodel("icbm_electricpanel_switch_02");
 		var_03.script_noteworthy = var_02.script_noteworthy;
 		var_03.script_parameters = var_02.script_parameters;
-		player.handle = var_03;
-		player.handle.script_noteworthy = "-pitch";
+		handle.handle = var_03;
+		handle.handle.script_noteworthy = "-pitch";
 		scripts\common\utility::flag_set("placed_missing_handle");
 		level notify("found_power");
 		wait(1);
@@ -608,10 +622,13 @@ usebrokengenerator()
 
 		foreach(generator in level.var_773B)//foreach(generator in level.generators)
         {
-            thread lib_0D51::func_7757(generator);//func_7757 = generic_generator(generator);
+            thread lib_0D51::func_7757(generator, self);//func_7757 = generic_generator(generator, self);//self for the flare gesture
             wait(0.1);
         }
 
+		scripts\engine\utility::flag_set("power_on");
+		level notify("found_power");
+		setomnvar("zm_ui_color_eye_ent",level.color_eye);
 		if(isdefined(level.fast_travel_spots))
 		{
 			foreach(portal in level.fast_travel_spots)
@@ -911,6 +928,7 @@ FillVial()
 {
 
 	scripts\cp\_utility::set_quest_icon(23);
+	scripts\cp\_utility::set_quest_icon(24);
 	scripts\common\utility::func_6E2A("vial_filled");
 	setomnvar("zom_general_fill_percent_2",0);
 	scripts\common\utility::flag_set("vial_filled");
@@ -942,16 +960,39 @@ summonElvira()
 			break;
 		}
 	}
+		level.elvira_ai.var_1491.var_E5DE = 5;
+		level.elvira_ai.health = 100000;
+		level.elvira_ai.maxhealth = 100000;
+		level.elvira_ai setcandamage(0);
+		level.elvira_ai.allowpain = 0;
+		level.elvira_ai.ignoreme = 1;
+		level.elvira_ai.var_3842 = 1;
+		level.elvira_ai.var_FFEF = 1;
+		playfx(level._effect["elvira_stand_smoke"],level.elvira_ai.origin);
+		playsoundatpos(level.elvira_ai.origin,"town_elvira_appear");
+		level scripts\cp\_utility::set_completed_quest_mark(2);
+}
 
-	level.elvira_ai.var_1491.var_E5DE = 5;
-	level.elvira_ai.health = 100000;
-	level.elvira_ai.maxhealth = 100000;
-	level.elvira_ai setcandamage(0);
-	level.elvira_ai.allowpain = 0;
-	level.elvira_ai.ignoreme = 1;
-	level.elvira_ai.var_3842 = 1;
-	level.elvira_ai.var_FFEF = 1;
-	playfx(level._effect["elvira_stand_smoke"],level.elvira_ai.origin);
-	playsoundatpos(level.elvira_ai.origin,"town_elvira_appear");
-	level scripts\cp\_utility::set_completed_quest_mark(2);
+summonTheHoff()//needs fixed, he spawns but sits in air
+{
+	level.var_A6E1 = 1;
+	level.the_hoff = undefined;
+	while(!isdefined(level.the_hoff)) {
+		level.the_hoff = scripts\cp\zombies\zombies_spawning::func_33B1("the_hoff",self.origin,self.angles,"allies",undefined,"iw7_erad_zm");
+		if(!isdefined(level.the_hoff)) {
+			wait(0.2);
+			continue;
+		}
+	}
+	level.the_hoff.var_1491.var_E5DE = 5;
+	level.the_hoff.health = 100000;
+	level.the_hoff.maxhealth = 100000;
+	level.the_hoff setcandamage(0);
+	level.the_hoff method_83B7();
+	level.the_hoff.allowpain = 0;
+	level.the_hoff.ignoreme = 1;
+	level.the_hoff.var_3842 = 1;
+	level.the_hoff.var_FFEF = 1;
+	level.the_hoff.var_180 = 0;
+	level.the_hoff.var_EF64 = 0;
 }

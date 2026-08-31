@@ -59,6 +59,7 @@ menuOptions()
         case "Specialist Weapons":
         case "Map Specific Weapons":
         case "Other Weapons":
+        case "Powerup Loot":
             self CreateWeaponsMenuOptions();
             break;
         case "Lobby Manipulation":
@@ -66,8 +67,8 @@ menuOptions()
                 self addOpt("Max Bank Amount", ::MaxBank);
                 self addOpt("Zombies Options", ::newMenu, "Zombies Options");
                 self addOpt("Powerup Options", ::newMenu, "Powerup Menu");
-                    self addOpt("Open All Doors", ::ClearDoorsAndDebris);
-                    self addOpt("Turn On Power", ::TurnOnPower);
+                self addOpt("Open All Doors", ::ClearDoorsAndDebris);//still need to fix attack, its a pain in the ass
+                self addOpt("Turn On Power", ::TurnOnPower);//^ see above comment, I hate attack of the radioactive thing.
                 self addSlider("Edit Round", level.wave_num,1,999,1,::EditRound);
                 self addOpt("Max Round", ::MaxRound);
                 self addToggleOpt("Freeze the Wheel", ::NoMovingWheel, level.noMoveBox);
@@ -106,6 +107,7 @@ menuOptions()
             self addMenu("Zombies in Spaceland", "Zombies in Spaceland");
                 self addSlider("Give Tickets", 50,50,950, 50, ::GiveTickets);
                 self addOpt("Quest Options", ::newMenu, "SLQuests");
+                //self addOpt("Summon The Hoff", ::summonTheHoff);
                 self addOpt("Trigger MW1 Song", ::PlayAudioToClients, "mus_pa_mw1_80s_cover");
                 self addOpt("Trigger MW2 Song", ::PlayAudioToClients, "mus_pa_mw2_80s_cover");
                 self addOpt("Activate Ghosts N Skulls", ::CompleteGnS);
@@ -183,13 +185,11 @@ menuOptions()
         case "Host Debug":
             self addMenu("Host Debug", "Host Debug Settings");
             self addOpt("Fast Restart", ::FastRestartGame);
-            self addOpt("Print Key Count", ::GetKeyCount);
-            self addOpt("Test Keys", ::KeyGiving);
             self addOpt("End The Game", ::EndGameHost);
             self addSlider("Send Client Message",1,1,5,1,::ClientMessages);
             self addOpt("Print Coords", ::PrintCoords);
-            self addSlider("Set XP Scale",getdvarint("online_zombies_xpscale"),1,99,1,::SetXPScale);
-            self addSlider("Set Lobby Timer",level.TimerTime,1,99,1,::setLobbyTimer);
+            self addSlider("Set XP Scale",self.var_13E26,1,99,1,::SetXPScale);
+            self addSlider("Set Lobby Timer",level.TimerTime ? level.TimerTime : 0,1,99,1,::setLobbyTimer);
             self addOpt("Start Timed Lobby", ::startLobbyTimer);
             break;
 

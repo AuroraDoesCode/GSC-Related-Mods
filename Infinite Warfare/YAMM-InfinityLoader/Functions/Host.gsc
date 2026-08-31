@@ -49,7 +49,7 @@ setLobbyTimer(time)
 
 FastRestartGame()
 {
-    map_restart(true);//true to remember custom dvars
+    map_restart(1);//true to remember custom dvars
 }
 
 
@@ -61,7 +61,7 @@ PrintCoords()
    
 SetXPScale(scale)
 {
-    self.var_13E26 = scale;
-    self.var_13C37 = scale;
+    self.var_13E26 = scale;//player xp scale
+    self.var_13C37 = scale;//weapon xp scale
     self iPrintLnAlt("XP Scale Set To: "+scale);
 }

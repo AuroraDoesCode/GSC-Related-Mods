@@ -28,12 +28,10 @@ initializeSetup(access, player, allaccess)
     player.PlayerHuds   = [];
     player.menu["isOpen"] = false;
     player.menu["isLocked"] = false;
-    player.menu["Theme"]["Default"] = true;
     if(!isDefined(player.menu["current"]))
         player.menu["current"] = "main";
         
     player.access = access;
-    
     if(player.access != 0)
     {
         player thread menuMonitor();

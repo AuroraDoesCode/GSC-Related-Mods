@@ -150,7 +150,8 @@ InitializeMenu()
     level._PowerupDropNames = ["Nuke", "Max Ammo", "Instakill", "Double Points", "Carpenter", "Weapon Upgrade", "Infinite Ammo", "Infinite Grenades", "Fire Sale"];
     level.pickupLoot        = ["power_bioSpike","power_c4","power_clusterGrenade","power_concussionGrenade","power_frag","power_gasGrenade","power_semtex","power_splashGrenade"];
     level.pickupLootName    = ["Bio Spikes","C4","Cluster Grenades","Concussion Grenades","Frag Grenades","Gas Grenades","Semtex Grenades", "Splash Grenades"];
-    level.pickupPowers      = ["power_speedBoost","power_teleport","power_transponder","power_cloak","power_barrier","power_mortarMount"];
+    level.pickupPowers      = ["power_rewind","power_armageddon","power_transponder","power_repulsor","power_phaseShift","power_blackholeGrenade"];
+    level.pickupPowerNames      = ["Rewind","Armageddon","Transponder","Repulsor","Phase Shift","Black Hole Grenade"];
     level.trapNames         = ["Sentry Turret","Fireworks Trap","Medusa Device","Electric Trap","Boombox","Revocator","Kindle Pops","Lazer Window Trap"];
     if(level.script == "cp_zmb"){ level.jailPos = (3356.53,-996.361, -195.873); level.freePos = (640.463,919.658,0.126336); level.EESong = "mus_pa_mw2_80s_cover";} else if(level.script == "cp_rave") { level.EESong = "mus_pa_rave_hidden_track"; } else if(level.script == "cp_disco") { level.EESong = "mus_pa_disco_hidden_track"; }
 }
@@ -169,7 +170,7 @@ welcomeMessage(message, message2)
     self.welcomeMessage = true;
 
     hud = [];
-
+    //zm_icon_rank_prestige_49
     // Text
     hud[1] = self createText("objective",1.15,"BOTTOMCENTER","BOTTOMCENTER",0,-84,10,0,message);
 
@@ -234,14 +235,6 @@ modelSpawner(origin, model, angles, time)
         obj delete();
     }
     return obj;
-}
-
-KeyGiving()//doesnt work, ugh
-{
-    self setplayerdata("cp", "alienSession", "consumablesearned", 99999);
-    self setplayerdata("cp","alienSession","time",99999);
-    self setplayerdata("cp","alienSession","score",99999);
-    self iPrintLnAlt("You should have 99999 Keys");
 }
 
 setPlayerAtPoint(origin, angles)
