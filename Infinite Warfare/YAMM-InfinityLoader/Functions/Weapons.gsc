@@ -78,12 +78,12 @@ build_custom_weapon(weapon, camo, extra_attachments)
     
     if (isDefined(self.var_13C00[weapon_name])) {
         weapon_model       = self.var_13C00[weapon_name];
-        weapon_attachments = scripts\cp\_utility::func_8217(weapon_model);
-        weapon_build       = CombineArrays(extra_attachments, weapon_attachments);
+        weapon_attachments = function_00E3(weapon_model);
+        weapon_build       = scripts\common\_utility::array_combine(extra_attachments, weapon_attachments);
         weapon_custom      = self scripts\cp\_weapon::func_E469(getweaponbasename(weapon), undefined, weapon_build, 1, camo);
         return weapon_custom;
     } else {
-        weapon_custom = CombineArrays(extra_attachments, weapon);
+        weapon_custom = scripts\common\_utility::array_combine(extra_attachments, weapon);
         return weapon_custom;
     }
 }
