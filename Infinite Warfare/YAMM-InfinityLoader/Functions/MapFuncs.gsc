@@ -118,6 +118,7 @@ CombineArrays(array1,array2,array3,array4)
             FinalArray[FinalArray.size] = item;
         }
     }
+return FinalArray;
 }
 
 
